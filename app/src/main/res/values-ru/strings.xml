@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Кулинарная книга</string>
+    <string name="search">Поиск</string>
+    <string name="more">Фильтр</string>
+    <string name="content_description_search">Поиск</string>
+    <string name="content_description_filter">Фильтр</string>
+    <string name="allRecipes">Все рецепты</string>
+    <string name="favorites">Избранное</string>
+    <string name="add_recipe">Добавить рецепт</string>
+    <string name="category">Категория</string>
+    <string name="author">Автор</string>
+    <string name="description_recipe_like">Нравится</string>
+    <string name="european">Европейская</string>
+    <string name="asian">Азиатская</string>
+    <string name="panasian">Паназиатская</string>
+    <string name="eastern">Восточная</string>
+    <string name="american">Американская</string>
+    <string name="russian">Русская</string>
+    <string name="mediterranean">Средиземноморская</string>
+    <string name="title">"Название"</string>
+    <string name="step">"Шаг "</string>
+    <string name="hintSearch">Поиск рецепта по названию</string>
+    <string name="menu_edit">Изменить</string>
+    <string name="remove">Удалить</string>
+    <string name="categoryForInput">Категория</string>
+    <string name="selectPhoto">Выбрать фото</string>
+    <string name="stepDescription">Описание шага</string>
+    <string name="selectStepPhoto">Выбрать фото\nдля шага</string>
+    <string name="addStep">Добавить шаг</string>
+</resources>

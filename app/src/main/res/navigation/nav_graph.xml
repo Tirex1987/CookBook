@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/feedFragment">
+
+    <fragment
+        android:id="@+id/feedFragment"
+        android:name="ru.netology.cookbook.ui.FeedFragment"
+        android:label="feed_fragment"
+        tools:layout="@layout/feed_fragment" >
+        <action
+            android:id="@+id/action_feedFragment_to_PreviewRecipeFragment"
+            app:destination="@id/previewRecipeFragment" />
+        <action
+            android:id="@+id/action_feedFragment_to_editRecipeFragment"
+            app:destination="@id/editRecipeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/favoriteFragment"
+        android:name="ru.netology.cookbook.ui.FavoriteFragment"
+        android:label="favorite_fragment"
+        tools:layout="@layout/favorite_fragment" >
+        <action
+            android:id="@+id/action_favoriteFragment_to_previewRecipeFragment"
+            app:destination="@id/previewRecipeFragment" />
+        <action
+            android:id="@+id/action_favoriteFragment_to_editRecipeFragment"
+            app:destination="@id/editRecipeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/previewRecipeFragment"
+        android:name="ru.netology.cookbook.ui.PreviewRecipeFragment"
+        android:label="preview_recipe_fragment"
+        tools:layout="@layout/preview_recipe_fragment" >
+        <argument
+            android:name="recipe"
+            app:argType="ru.netology.cookbook.data.Recipe" />
+    </fragment>
+    <fragment
+        android:id="@+id/editRecipeFragment"
+        android:name="ru.netology.cookbook.ui.EditRecipeFragment"
+        android:label="EditRecipeFragment" >
+        <argument
+            android:name="recipe"
+            app:argType="ru.netology.cookbook.data.Recipe"/>
+    </fragment>
+</navigation>

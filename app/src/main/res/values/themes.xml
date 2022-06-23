@@ -1,0 +1,58 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.CookBook" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" >?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="Widget.AppTheme.OptionsButton" parent="Widget.MaterialComponents.Button.TextButton.Icon">
+        <item name="iconTint">@color/counterTextColor</item>
+        <item name="android:textColor">@color/counterTextColor</item>
+        <item name="android:minWidth">@dimen/icon_options_size</item>
+        <item name="android:minHeight">@dimen/icon_options_size</item>
+        <item name="icon">@drawable/ic_options_24dp</item>
+    </style>
+
+    <style name="Widget.AppTheme.LikeCheckBox" parent="Widget.MaterialComponents.Button.TextButton.Icon">
+        <item name="icon">@drawable/ic_like_selector</item>
+        <item name="iconTint">@color/like_tint</item>
+        <item name="android:textColor">@color/counterTextColor</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="android:minWidth">@dimen/icon_button_size</item>
+        <item name="android:minHeight">@dimen/icon_button_size</item>
+    </style>
+
+    <style name="Widget.AppTheme.FilterButton" parent="Widget.MaterialComponents.Button.OutlinedButton.Icon">
+        <item name="icon">@drawable/ic_white_filter_24dp</item>
+        <item name="android:gravity">center</item>
+        <item name="iconTint">@android:color/holo_blue_light</item>
+        <item name="android:minWidth">@dimen/icon_filter_size</item>
+        <item name="android:minHeight">@dimen/icon_filter_size</item>
+    </style>
+
+    <style name="Widget.AppTheme.DeleteButton" parent="Widget.MaterialComponents.Button.TextButton.Icon">
+        <item name="iconTint">@color/counterTextColor</item>
+        <item name="android:textColor">@color/counterTextColor</item>
+        <item name="android:minWidth">@dimen/icon_options_size</item>
+        <item name="android:minHeight">@dimen/icon_options_size</item>
+        <item name="icon">@drawable/ic_delete_24dp</item>
+    </style>
+
+    <style name="Widget.AppTheme.EditButton" parent="Widget.MaterialComponents.Button.TextButton.Icon">
+        <item name="iconTint">@color/counterTextColor</item>
+        <item name="android:textColor">@color/counterTextColor</item>
+        <item name="android:minWidth">@dimen/icon_options_size</item>
+        <item name="android:minHeight">@dimen/icon_options_size</item>
+        <item name="icon">@drawable/ic_edit_24dp</item>
+    </style>
+
+</resources>

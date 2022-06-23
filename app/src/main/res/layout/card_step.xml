@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayoutRecipe"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/common_spacing">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/stepInscriprtion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/step"
+        android:textSize="@dimen/title_text_size"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/stepNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingEnd="@dimen/common_spacing"
+        android:textSize="@dimen/title_text_size"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/stepInscriprtion"
+        app:layout_constraintStart_toEndOf="@id/stepInscriprtion"
+        tools:text="1" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/editStepButton"
+        style="@style/Widget.AppTheme.EditButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/stepInscriprtion"
+        app:layout_constraintStart_toEndOf="@id/stepNumber"
+        app:layout_constraintTop_toTopOf="@id/stepInscriprtion" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/deleteStepButton"
+        style="@style/Widget.AppTheme.DeleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/editStepButton"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupEditStep"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="editStepButton, deleteStepButton" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="stepInscriprtion, editStepButton" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/stepContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/small_space"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrier3"
+        tools:text="sdf sdf\n\nkot" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/stepPhotoView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/imageHeight"
+        android:scaleType="fitCenter"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/stepContent"
+        tools:src="@tools:sample/avatars"
+        tools:visibility="visible" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/small_space"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/stepPhotoView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

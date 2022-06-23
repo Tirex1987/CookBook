@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">CookBook</string>
+    <string name="search">Search</string>
+    <string name="more">Filter</string>
+    <string name="content_description_search">Search</string>
+    <string name="content_description_filter">Filter</string>
+    <string name="allRecipes">All recipes</string>
+    <string name="favorites">Favorites</string>
+    <string name="add_recipe">Add recipe</string>
+    <string name="category">Category</string>
+    <string name="author">Author</string>
+    <string name="description_recipe_like">Like</string>
+    <string name="european">European</string>
+    <string name="asian">Asian</string>
+    <string name="panasian">Pan-Asian</string>
+    <string name="eastern">Eastern</string>
+    <string name="american">American</string>
+    <string name="russian">Russian</string>
+    <string name="mediterranean">Mediterranean</string>
+    <string name="title">"Title"</string>
+    <string name="step">"Step "</string>
+    <string name="hintSearch">Search recipe by title</string>
+    <string name="menu_edit">Edit</string>
+    <string name="remove">Remove</string>
+    <string name="categoryForInput">Category</string>
+    <string name="selectPhoto">Select photo</string>
+    <string name="stepDescription">Step description</string>
+    <string name="selectStepPhoto">Select photo\nfor step</string>
+    <string name="addStep">Add step</string>
+</resources>
