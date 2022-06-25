@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
-import ru.netology.cookbook.adapter.EditStepsAdapter
 import ru.netology.cookbook.adapter.StepsAdapter
 import ru.netology.cookbook.databinding.PreviewRecipeFragmentBinding
 import java.lang.RuntimeException
@@ -41,11 +40,12 @@ class PreviewRecipeFragment : Fragment() {
             }
         }
 
-        val adapter = EditStepsAdapter(null)
+        val adapter = StepsAdapter(null)
 
-        binding.stepsRecipesRecyclerView.adapter = adapter
-        //adapter.list = receivedRecipe.steps
-        adapter.submitList(receivedRecipe.steps)
+        with(adapter) {
+            binding.stepsRecipesRecyclerView.adapter = this
+            submitList(receivedRecipe.steps)
+        }
 
 
     }.root

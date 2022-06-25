@@ -2,17 +2,17 @@ package ru.netology.cookbook.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import ru.netology.cookbook.R
-import ru.netology.cookbook.adapter.EditStepsAdapter
-import ru.netology.cookbook.adapter.RecipesAdapter
+import ru.netology.cookbook.adapter.StepsAdapter
 import ru.netology.cookbook.data.Category
-import ru.netology.cookbook.data.EditStepInteractionListenerImpl
+import ru.netology.cookbook.data.RecipeEditor
+import ru.netology.cookbook.data.StepOfRecipe
 import ru.netology.cookbook.databinding.EditRecipeFragmentBinding
 import ru.netology.cookbook.viewModel.RecipeViewModel
 
@@ -35,6 +35,8 @@ class EditRecipeFragment : Fragment() {
 
         (requireActivity() as? AppActivity)?.showBottomNav(false)
 
+        viewModel.currentRecipe.value = receivedRecipe
+
         val items = Category.values().map {
             it.getText(requireContext())
         }
@@ -47,15 +49,26 @@ class EditRecipeFragment : Fragment() {
             binding.autoCompleteTextView.setText(receivedRecipe.category.getText(requireContext()), false)
         }
 
-        //if (receivedRecipe)
+        val recipeEditor = RecipeEditor(viewModel.currentRecipe)
 
-        val stepsListener = EditStepInteractionListenerImpl(receivedRecipe.steps)
-
-        val adapter = EditStepsAdapter(stepsListener)
+        val adapter = StepsAdapter(recipeEditor)
         binding.stepsRecipesRecyclerView.adapter = adapter
 
-        viewModel.data.observe(viewLifecycleOwner) { recipes ->
-            adapter.submitList(recipes.find { it.id == receivedRecipe.id }?.steps)
+        viewModel.currentRecipe.observe(viewLifecycleOwner) { recipe ->
+            adapter.submitList(recipe?.steps)
+        }
+
+        viewModel.navigateToEditStepFragment.observe(viewLifecycleOwner) { step ->
+            val direction = EditRecipeFragmentDirections.actionEditRecipeFragmentToEditStepFragment(step)
+            findNavController().navigate(direction)
+        }
+
+        binding.addStep.setOnClickListener {
+            viewModel.navigateToEditStepFragment.value = StepOfRecipe(
+                id = 0,
+                order = recipeEditor.steps().size + 1,
+                content = ""
+            )
         }
 
     }.root

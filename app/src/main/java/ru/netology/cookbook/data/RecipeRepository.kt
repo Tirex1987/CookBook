@@ -11,5 +11,6 @@ interface RecipeRepository {
 
     companion object {
         const val NEW_RECIPE_ID = 0
+        const val NEW_STEP_ID = 0
     }
 }

@@ -26,6 +26,8 @@
     <string name="categoryForInput">Категория</string>
     <string name="selectPhoto">Выбрать фото</string>
     <string name="stepDescription">Описание шага</string>
-    <string name="selectStepPhoto">Выбрать фото\nдля шага</string>
+    <string name="selectStepPhoto">Выбрать\nфото\nдля шага</string>
     <string name="addStep">Добавить шаг</string>
+    <string name="description_save">Сохранить</string>
+    <string name="delete">Удалить</string>
 </resources>

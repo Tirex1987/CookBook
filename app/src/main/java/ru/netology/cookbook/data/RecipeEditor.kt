@@ -1,23 +1,27 @@
 package ru.netology.cookbook.data
 
+import androidx.lifecycle.MutableLiveData
 import ru.netology.cookbook.adapter.EditStepInteractionListener
 
-class EditStepInteractionListenerImpl(
-    private var steps: List<StepOfRecipe>
+class RecipeEditor(
+    private val recipeLiveData: MutableLiveData<Recipe?>
 ) : EditStepInteractionListener {
 
     override fun onDeleteClicked(step: StepOfRecipe) {
-        steps
+        val recipe = checkNotNull(recipeLiveData.value)
+        recipeLiveData.value = recipe.copy(
+        steps = recipe.steps
             .filterNot { it.id == step.id }
             .map {
                 if (it.order < step.order) it
                 else it.copy(order = it.order - 1)
             }
+        )
     }
 
     override fun onEditClicked(step: StepOfRecipe) {
         TODO("Not yet implemented")
     }
 
-    fun steps() = steps
+    fun steps() = checkNotNull(recipeLiveData.value).steps
 }

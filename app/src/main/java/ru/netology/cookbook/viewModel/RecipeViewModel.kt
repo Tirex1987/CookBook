@@ -21,8 +21,9 @@ class RecipeViewModel(
 
     val navigateToPreviewContentFragment = SingleLiveEvent<Recipe>()
     val navigateToEditRecipeFragment = SingleLiveEvent<Recipe>()
+    val navigateToEditStepFragment = SingleLiveEvent<StepOfRecipe>()
 
-    private val currentRecipe = MutableLiveData<Recipe?>(null)
+    val currentRecipe = MutableLiveData<Recipe?>(null)
 
     // region RecipeInteractionListener
 
@@ -39,7 +40,6 @@ class RecipeViewModel(
     }
 
     override fun onEditClicked(recipe: Recipe) {
-        currentRecipe.value = recipe
         navigateToEditRecipeFragment.value = recipe
     }
 

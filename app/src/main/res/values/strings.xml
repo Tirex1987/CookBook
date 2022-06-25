@@ -25,6 +25,8 @@
     <string name="categoryForInput">Category</string>
     <string name="selectPhoto">Select photo</string>
     <string name="stepDescription">Step description</string>
-    <string name="selectStepPhoto">Select photo\nfor step</string>
+    <string name="selectStepPhoto">Select\nphoto\nfor step</string>
     <string name="addStep">Add step</string>
+    <string name="description_save">Save</string>
+    <string name="delete">Remove</string>
 </resources>
