@@ -29,4 +29,8 @@
     <string name="addStep">Add step</string>
     <string name="description_save">Save</string>
     <string name="delete">Remove</string>
+    <string name="blankContentStepMessage">Enter a description for the step</string>
+    <string name="requiredFieldStart">The \"</string>
+    <string name="requiredFieldEnd">\" field is required\n</string>
+    <string name="blankStepError">Add at least one step</string>
 </resources>

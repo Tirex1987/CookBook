@@ -25,6 +25,10 @@ class RecipeViewModel(
 
     val currentRecipe = MutableLiveData<Recipe?>(null)
 
+    fun saveRecipe(recipe: Recipe) {
+        repository.save(recipe)
+    }
+
     // region RecipeInteractionListener
 
     override fun onLikeClicked(recipe: Recipe) {

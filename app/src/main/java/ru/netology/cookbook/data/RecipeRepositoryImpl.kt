@@ -1,11 +1,11 @@
 package ru.netology.cookbook.data
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
 class RecipeRepositoryImpl : RecipeRepository {
 
-    private var lastId = 0L
+    private var lastIdRecipe = 0L
+    private var lastIdStep = 0L
 
     private val recipes
         get() = checkNotNull(data.value) {
@@ -15,13 +15,17 @@ class RecipeRepositoryImpl : RecipeRepository {
     override val data = MutableLiveData(
         List(100) { index ->
             Recipe(
-                id = ++lastId,
-                order = lastId,
-                title = "Keks $lastId",
+                id = ++lastIdRecipe,
+                order = lastIdRecipe,
+                title = "Keks $lastIdRecipe",
                 authorName = "Andrey",
                 category = Category.Russian,
                 steps = MutableList(10) {
-                    StepOfRecipe((it + 1).toLong(), it + 1, "d\ng\nu\n")
+                    StepOfRecipe(
+                        id = ++lastIdStep,
+                        order = it + 1,
+                        content = "d\ng\nu\n"
+                    )
                 }
             )
         }
@@ -37,8 +41,31 @@ class RecipeRepositoryImpl : RecipeRepository {
         data.value = recipes.filterNot { it.id == recipeId }
     }
 
-    override fun save(recipeId: Long) {
-        TODO("Not yet implemented")
+    override fun save(recipe: Recipe) {
+        verifyStepsId(recipe)
+        if (recipe.id == RecipeRepository.NEW_RECIPE_ID) insert(recipe) else update(recipe)
+    }
+
+    private fun verifyStepsId(recipe: Recipe) {
+        val newRecipe = recipe.copy(
+            steps = recipe.steps.map {
+                if (it.id != RecipeRepository.NEW_STEP_ID) it
+                else it.copy(id = ++lastIdStep)
+            }
+        )
+        update(newRecipe)
+    }
+
+    private fun insert(recipe: Recipe) {
+        data.value = listOf(
+            recipe.copy(id = ++lastIdRecipe)
+        ) + recipes
+    }
+
+    private fun update(recipe: Recipe) {
+        data.value = recipes.map {
+            if (it.id != recipe.id) it else recipe
+        }
     }
 
 }

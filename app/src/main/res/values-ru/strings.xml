@@ -30,4 +30,8 @@
     <string name="addStep">Добавить шаг</string>
     <string name="description_save">Сохранить</string>
     <string name="delete">Удалить</string>
+    <string name="blankContentStepMessage">Введите описание для шага</string>
+    <string name="requiredFieldStart">Поле \"</string>
+    <string name="requiredFieldEnd">\" обязательно для заполнения\n</string>
+    <string name="blankStepError">Добавьте хотя бы один шаг</string>
 </resources>

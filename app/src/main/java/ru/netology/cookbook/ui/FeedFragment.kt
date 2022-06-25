@@ -3,6 +3,7 @@ package ru.netology.cookbook.ui
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.cookbook.adapter.RecipesAdapter
@@ -42,6 +43,13 @@ class FeedFragment : Fragment() {
         viewModel.navigateToEditRecipeFragment.observe(viewLifecycleOwner) { recipe ->
             val direction = FeedFragmentDirections.actionFeedFragmentToEditRecipeFragment(recipe)
             findNavController().navigate(direction)
+        }
+
+        setFragmentResultListener(
+            requestKey = EditRecipeFragment.REQUEST_KEY
+        ) { requestKey, _ ->
+            if (requestKey != EditRecipeFragment.REQUEST_KEY) return@setFragmentResultListener
+            viewModel.saveRecipe(viewModel.currentRecipe.value ?: return@setFragmentResultListener)
         }
 
     }.root

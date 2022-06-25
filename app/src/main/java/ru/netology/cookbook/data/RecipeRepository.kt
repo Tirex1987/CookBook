@@ -7,10 +7,10 @@ interface RecipeRepository {
 
     fun like(recipeId: Long)
     fun delete(recipeId: Long)
-    fun save(recipeId: Long)
+    fun save(recipe: Recipe)
 
     companion object {
-        const val NEW_RECIPE_ID = 0
-        const val NEW_STEP_ID = 0
+        const val NEW_RECIPE_ID = 0L
+        const val NEW_STEP_ID = 0L
     }
 }
