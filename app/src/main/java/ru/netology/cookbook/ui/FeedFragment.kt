@@ -2,15 +2,14 @@ package ru.netology.cookbook.ui
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import ru.netology.cookbook.R
 import ru.netology.cookbook.adapter.RecipesAdapter
 import ru.netology.cookbook.databinding.FeedFragmentBinding
 import ru.netology.cookbook.utils.OrderPermission
+import ru.netology.cookbook.utils.hideKeyboard
 import ru.netology.cookbook.viewModel.RecipeViewModel
 
 class FeedFragment : Fragment() {
@@ -19,7 +18,7 @@ class FeedFragment : Fragment() {
         ownerProducer = ::requireParentFragment
     )
 
-    val orderPermission = OrderPermission(this)
+    private val orderPermission = OrderPermission(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,11 +40,15 @@ class FeedFragment : Fragment() {
         binding.recipesRecyclerView.adapter = adapter
 
         viewModel.data.observe(viewLifecycleOwner) { recipes ->
-            adapter.submitList(recipes)
+            adapter.submitList(viewModel.getFilteredData())
         }
 
         binding.fab.setOnClickListener {
-            TODO()
+            viewModel.onAddClicked()
+        }
+
+        binding.filterButton.setOnClickListener {
+            viewModel.onFilterClicked()
         }
 
         viewModel.navigateToPreviewContentFragment.observe(viewLifecycleOwner) { recipe ->
@@ -58,11 +61,37 @@ class FeedFragment : Fragment() {
             findNavController().navigate(direction)
         }
 
+        viewModel.navigateToFilterFragment.observe(viewLifecycleOwner) {
+            val direction = FeedFragmentDirections.actionFeedFragmentToFilterFragment()
+            findNavController().navigate(direction)
+        }
+
+        binding.searchEditText.setOnKeyListener(object: View.OnKeyListener {
+            override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
+                if (event?.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+                    viewModel.onSearchClicked(binding.searchEditText.text.toString())
+                    adapter.submitList(viewModel.getFilteredData())
+                    binding.searchEditText.clearFocus()
+                    binding.searchEditText.hideKeyboard()
+                    return true
+                }
+                return false
+            }
+        })
+
         setFragmentResultListener(
             requestKey = EditRecipeFragment.REQUEST_KEY
         ) { requestKey, _ ->
             if (requestKey != EditRecipeFragment.REQUEST_KEY) return@setFragmentResultListener
             viewModel.saveRecipe(viewModel.currentRecipe.value ?: return@setFragmentResultListener)
+        }
+
+        setFragmentResultListener(
+            requestKey = FilterFragment.REQUEST_KEY
+        ) { requestKey, _ ->
+            if (requestKey != FilterFragment.REQUEST_KEY) return@setFragmentResultListener
+            viewModel.onApplyFilterClicked()
+            adapter.submitList(viewModel.getFilteredData())
         }
 
     }.root

@@ -52,8 +52,8 @@ class EditStepFragment : Fragment() {
             }
         }
 
-        val selectPhotoLauncher = openImageIntent.registerForAvitvityResult {
-            imagePath = it ?: return@registerForAvitvityResult
+        val selectPhotoLauncher = openImageIntent.registerForActivityResult {
+            imagePath = it ?: return@registerForActivityResult
             val bitmap = BitmapFactory.decodeFile(imagePath)
             binding.stepPhotoView.setImageBitmap(bitmap)
         }

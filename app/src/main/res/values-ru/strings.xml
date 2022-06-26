@@ -35,4 +35,5 @@
     <string name="requiredFieldEnd">\" обязательно для заполнения\n</string>
     <string name="blankStepError">Добавьте хотя бы один шаг</string>
     <string name="imagesLoadError">Изображения не будут загружены</string>
+    <string name="filterCategory">Фильтр по категориям</string>
 </resources>

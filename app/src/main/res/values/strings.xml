@@ -34,4 +34,5 @@
     <string name="requiredFieldEnd">\" field is required\n</string>
     <string name="blankStepError">Add at least one step</string>
     <string name="imagesLoadError">Images won\'t load</string>
+    <string name="filterCategory">Filter by category</string>
 </resources>

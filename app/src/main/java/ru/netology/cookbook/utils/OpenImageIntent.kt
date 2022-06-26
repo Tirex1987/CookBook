@@ -12,7 +12,7 @@ class OpenImageIntent(
     private val fragment: Fragment
 ) {
 
-    fun registerForAvitvityResult(eventForResult: (String?) -> Unit): ActivityResultLauncher<Unit> {
+    fun registerForActivityResult(eventForResult: (String?) -> Unit): ActivityResultLauncher<Unit> {
         return fragment.registerForActivityResult(ResultContract) {
             val imagePath = it?.getRealPath(fragment.requireContext())
             eventForResult(imagePath)

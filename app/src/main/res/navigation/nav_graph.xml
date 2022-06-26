@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_feedFragment_to_editRecipeFragment"
             app:destination="@id/editRecipeFragment" />
+        <action
+            android:id="@+id/action_feedFragment_to_filterFragment"
+            app:destination="@id/filterFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
@@ -58,4 +61,9 @@
             android:name="step"
             app:argType="ru.netology.cookbook.data.StepOfRecipe" />
     </fragment>
+    <fragment
+        android:id="@+id/filterFragment"
+        android:name="ru.netology.cookbook.ui.FilterFragment"
+        android:label="filter_fragment"
+        tools:layout="@layout/filter_fragment" />
 </navigation>

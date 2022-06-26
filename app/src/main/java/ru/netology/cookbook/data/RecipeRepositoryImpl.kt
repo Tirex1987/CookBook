@@ -1,9 +1,33 @@
 package ru.netology.cookbook.data
 
+import android.app.Application
+import android.content.Context
 import android.graphics.BitmapFactory
+import androidx.core.content.edit
 import androidx.lifecycle.MutableLiveData
+import kotlin.properties.Delegates
 
-class RecipeRepositoryImpl : RecipeRepository {
+class RecipeRepositoryImpl(
+    application: Application
+): RecipeRepository {
+
+    private val prefs = application.getSharedPreferences(
+        "repo", Context.MODE_PRIVATE
+    )
+
+    private fun getCategoriesPrefs(): EnabledCategories {
+        val enabledCategories = EnabledCategories()
+        Category.values().map {
+            enabledCategories.setEnabled(it, prefs.getBoolean(it.toString(), true))
+        }
+        return enabledCategories
+    }
+
+    private fun setCategoriesPrefs(enabledCategories: EnabledCategories) {
+        Category.values().map {
+            prefs.edit {putBoolean(it.toString(), enabledCategories.isEnabled(it))}
+        }
+    }
 
     private var lastIdRecipe = 0L
     private var lastIdStep = 0L
@@ -31,6 +55,8 @@ class RecipeRepositoryImpl : RecipeRepository {
             )
         }
     )
+
+    override val enabledCategories = getCategoriesPrefs()
 
     override fun like(recipeId: Long) {
         data.value = recipes.map {
@@ -67,6 +93,10 @@ class RecipeRepositoryImpl : RecipeRepository {
         data.value = recipes.map {
             if (it.id != recipe.id) it else recipe
         }
+    }
+
+    override fun onApplyFilterClicked() {
+        setCategoriesPrefs(enabledCategories)
     }
 
 }

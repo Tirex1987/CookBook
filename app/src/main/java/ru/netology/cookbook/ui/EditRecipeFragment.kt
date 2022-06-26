@@ -94,8 +94,8 @@ class EditRecipeFragment : Fragment() {
             onSaveClicked(binding)
         }
 
-        val selectPhotoLauncher = openImageIntent.registerForAvitvityResult {
-            val imagePath = it ?: return@registerForAvitvityResult
+        val selectPhotoLauncher = openImageIntent.registerForActivityResult {
+            val imagePath = it ?: return@registerForActivityResult
             val editableRecipe = checkNotNull(viewModel.currentRecipe.value)
             viewModel.currentRecipe.value = editableRecipe.copy(
                 preview = imagePath
@@ -148,6 +148,12 @@ class EditRecipeFragment : Fragment() {
                     getString(R.string.requiredFieldStart) + getString(R.string.author) + getString(
                 R.string.requiredFieldEnd
             )
+        if (binding.autoCompleteTextView.text.isNullOrBlank()) {
+            textWarning = textWarning +
+                    getString(R.string.requiredFieldStart) + getString(R.string.category) + getString(
+                R.string.requiredFieldEnd
+            )
+        }
         val editableRecipe = checkNotNull(viewModel.currentRecipe.value)
         if (editableRecipe.steps.isEmpty()) {
             textWarning = textWarning + getString(R.string.blankStepError)
