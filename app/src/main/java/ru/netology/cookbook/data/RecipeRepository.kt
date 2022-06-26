@@ -9,6 +9,7 @@ interface RecipeRepository {
     fun like(recipeId: Long)
     fun delete(recipeId: Long)
     fun save(recipe: Recipe)
+    fun removeStep(stepId: Long)
     fun onApplyFilterClicked()
 
     companion object {

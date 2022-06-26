@@ -1,4 +1,4 @@
-package ru.netology.cookbook.db.recipes
+package ru.netology.cookbook.db.steps
 
 import android.content.Context
 import androidx.room.Database
@@ -6,11 +6,11 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [RecipesEntity::class],
+    entities = [StepsEntity::class],
     version = 1
 )
 abstract class AppDb : RoomDatabase() {
-    abstract val recipeDao: RecipeDao
+    abstract val stepDao: StepDao
 
     companion object {
         @Volatile
@@ -26,7 +26,7 @@ abstract class AppDb : RoomDatabase() {
             Room.databaseBuilder(
                 context, AppDb::class.java, "app.db"
             )
-                .allowMainThreadQueries()  //разрешаем запросы на основном потоке (не следует так делать)
+                .allowMainThreadQueries()
                 .build()
     }
 }

@@ -83,7 +83,13 @@ class FeedFragment : Fragment() {
             requestKey = EditRecipeFragment.REQUEST_KEY
         ) { requestKey, _ ->
             if (requestKey != EditRecipeFragment.REQUEST_KEY) return@setFragmentResultListener
-            viewModel.saveRecipe(viewModel.currentRecipe.value ?: return@setFragmentResultListener)
+            val newRecipe = viewModel.currentRecipe.value ?: return@setFragmentResultListener
+            viewModel.data.value?.find {
+                it.id == newRecipe.id
+            }?.steps?.map { step ->
+                newRecipe.steps.find { step.id == it.id } ?: viewModel.onRemoveStep(step)
+            }
+            viewModel.saveRecipe(newRecipe)
         }
 
         setFragmentResultListener(

@@ -12,7 +12,7 @@ class RecipeViewModel(
     application: Application
 ) : AndroidViewModel(application), RecipeInteractionListener{
 
-    private val repository: RecipeRepository = RecipeRepositoryImpl(application)
+    private val repository: RecipeRepository = RecipeRepositoryDb(application)
 
     val data by repository::data
 
@@ -63,6 +63,10 @@ class RecipeViewModel(
 
     fun onApplyFilterClicked() {
         repository.onApplyFilterClicked()
+    }
+
+    fun onRemoveStep(step: StepOfRecipe) {
+        repository.removeStep(step.id)
     }
 
     // region RecipeInteractionListener

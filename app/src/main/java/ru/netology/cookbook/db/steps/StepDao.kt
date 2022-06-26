@@ -6,9 +6,9 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
-interface StepsDao {
-    @Query("SELECT * FROM steps ORDER BY id DESC")
-    fun getAll(): List<StepsEntity>
+interface StepDao {
+    @Query("SELECT * FROM steps WHERE recipeId = :recipeId ORDER BY orderNum ASC")
+    fun getByRecipeId(recipeId: Long): List<StepsEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(step: StepsEntity)
@@ -22,7 +22,7 @@ interface StepsDao {
     """)
     fun updateContentById(
         id: Long,
-        orderNum: Long,
+        orderNum: Int,
         content: String,
         imagePath: String?
     )

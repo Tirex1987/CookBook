@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import ru.netology.cookbook.adapter.StepsAdapter
 import ru.netology.cookbook.databinding.PreviewRecipeFragmentBinding
+import ru.netology.cookbook.utils.loadBitmapFromPath
 import java.lang.RuntimeException
 
 
@@ -32,12 +33,8 @@ class PreviewRecipeFragment : Fragment() {
         binding.category.text = receivedRecipe.category.getText(requireContext())
 
         if (!receivedRecipe.preview.isNullOrBlank()) {
-            try {
-                binding.preview.visibility = View.VISIBLE
-                binding.preview.setImageURI(Uri.parse("file:/" + receivedRecipe.preview))
-            } catch (e: RuntimeException) {
-                binding.preview.visibility = View.GONE
-            }
+            binding.preview.visibility = View.VISIBLE
+            binding.preview.loadBitmapFromPath(receivedRecipe.preview)
         }
 
         val adapter = StepsAdapter(null)

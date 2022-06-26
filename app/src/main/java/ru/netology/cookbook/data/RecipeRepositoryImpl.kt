@@ -74,6 +74,10 @@ class RecipeRepositoryImpl(
         if (recipe.id == RecipeRepository.NEW_RECIPE_ID) insert(recipe) else update(recipe)
     }
 
+    override fun removeStep(stepId: Long) {
+        //("Not yet implemented")
+    }
+
     private fun verifyStepsId(recipe: Recipe) {
         val newRecipe = recipe.copy(
             steps = recipe.steps.map {

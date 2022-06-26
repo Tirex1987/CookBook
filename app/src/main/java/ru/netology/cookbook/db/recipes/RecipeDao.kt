@@ -12,7 +12,7 @@ interface RecipeDao {
     fun getAll(): LiveData<List<RecipesEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(post: RecipesEntity)
+    fun insert(recipe: RecipesEntity)
 
     @Query("""
         UPDATE recipes SET
@@ -41,4 +41,7 @@ interface RecipeDao {
 
     @Query("DELETE FROM recipes WHERE id = :id")
     fun removeById(id: Long)
+
+    @Query("SELECT MAX(id) as max FROM recipes")
+    fun getMaxId(): Long
 }
