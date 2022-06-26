@@ -1,6 +1,5 @@
 package ru.netology.cookbook.adapter
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.cookbook.data.StepOfRecipe
 import ru.netology.cookbook.databinding.CardStepBinding
+import ru.netology.cookbook.utils.loadBitmapFromPath
 import java.lang.RuntimeException
 
 class StepsAdapter (
@@ -41,9 +41,9 @@ class StepsAdapter (
                 stepNumber.text = step.order.toString()
                 stepContent.setText(step.content)
                 groupEditStep.isVisible = (interactionListener != null)
-                if (!step.stepImage.isNullOrBlank()) {
+                if (!step.imagePath.isNullOrBlank()) {
                     try {
-                        stepPhotoView.setImageURI(Uri.parse("file:/" + step.stepImage))
+                        stepPhotoView.loadBitmapFromPath(step.imagePath)
                         stepPhotoView.visibility = View.VISIBLE
                     } catch (e: RuntimeException) {
                     }

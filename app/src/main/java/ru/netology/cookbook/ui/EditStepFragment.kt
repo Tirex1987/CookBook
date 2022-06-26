@@ -1,6 +1,6 @@
 package ru.netology.cookbook.ui
 
-import android.net.Uri
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -12,7 +12,8 @@ import androidx.navigation.fragment.navArgs
 import ru.netology.cookbook.R
 import ru.netology.cookbook.data.RecipeRepository
 import ru.netology.cookbook.databinding.EditStepFragmentBinding
-import java.lang.RuntimeException
+import ru.netology.cookbook.utils.*
+
 
 class EditStepFragment : Fragment() {
 
@@ -20,6 +21,9 @@ class EditStepFragment : Fragment() {
         val args by navArgs<EditStepFragmentArgs>()
         args.step
     }
+
+    val orderPermission = OrderPermission(this)
+    val openImageIntent = OpenImageIntent(this)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,9 +35,9 @@ class EditStepFragment : Fragment() {
 
         if (receivedStep.id != RecipeRepository.NEW_STEP_ID) {
             binding.stepContent.setText(receivedStep.content)
-            if (!receivedStep.stepImage.isNullOrBlank()) {
+            if (!receivedStep.imagePath.isNullOrBlank() && orderPermission.checkPermission()) {
                 try {
-                    binding.stepPhotoView.setImageURI(Uri.parse("file:/" + receivedStep.stepImage))
+                    binding.stepPhotoView.loadBitmapFromPath(receivedStep.imagePath)
                 } catch (e: RuntimeException) {
                     binding.stepPhotoView.setImageResource(R.drawable.no_image)
                     imagePath = null
@@ -42,10 +46,26 @@ class EditStepFragment : Fragment() {
         }
 
         binding.deletePhotoButton.setOnClickListener {
-            if (! imagePath.isNullOrBlank()) {
+            if (!imagePath.isNullOrBlank()) {
                 imagePath = null
                 binding.stepPhotoView.setImageResource(R.drawable.no_image)
             }
+        }
+
+        val selectPhotoLauncher = openImageIntent.registerForAvitvityResult {
+            imagePath = it ?: return@registerForAvitvityResult
+            val bitmap = BitmapFactory.decodeFile(imagePath)
+            binding.stepPhotoView.setImageBitmap(bitmap)
+        }
+
+        binding.selectStepPhoto.setOnClickListener {
+            orderPermission.requestStoragePermission {
+                binding.selectStepPhoto.callOnClick()
+            }
+            if (!orderPermission.isPermissionStorage()) {
+                return@setOnClickListener
+            }
+            selectPhotoLauncher.launch(Unit)
         }
 
         binding.saveButton.setOnClickListener {
@@ -53,19 +73,23 @@ class EditStepFragment : Fragment() {
             if (!text.isBlank()) {
                 val resultBundle = Bundle()
                 resultBundle.putString(RESULT_KEY_CONTENT, text)
-                if (! imagePath.isNullOrBlank()) {
+                if (!imagePath.isNullOrBlank()) {
                     resultBundle.putString(RESULT_KEY_IMAGE_PATH, imagePath)
                 }
                 setFragmentResult(REQUEST_KEY, resultBundle)
                 findNavController().popBackStack()
             } else {
-                Toast.makeText(requireContext(), getString(R.string.blankContentStepMessage), Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.blankContentStepMessage),
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
 
     }.root
 
-    companion object{
+    companion object {
         const val RESULT_KEY_CONTENT = "stepNewContent"
         const val RESULT_KEY_IMAGE_PATH = "stepPhotoPath"
         const val REQUEST_KEY = "editStepRequestKey"

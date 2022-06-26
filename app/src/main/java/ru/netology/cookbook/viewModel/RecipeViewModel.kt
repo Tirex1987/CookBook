@@ -1,9 +1,9 @@
 package ru.netology.cookbook.viewModel
 
 import android.app.Application
+import android.graphics.BitmapFactory
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import ru.netology.cookbook.adapter.EditStepInteractionListener
 import ru.netology.cookbook.adapter.RecipeInteractionListener
 import ru.netology.cookbook.data.Recipe
 import ru.netology.cookbook.data.RecipeRepository

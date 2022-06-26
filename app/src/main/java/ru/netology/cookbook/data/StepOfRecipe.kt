@@ -4,5 +4,5 @@ data class StepOfRecipe (
     val id: Long,
     val order: Int,
     val content: String,
-    val stepImage: String? = null
+    val imagePath: String? = null
 ) : java.io.Serializable

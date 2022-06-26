@@ -36,7 +36,7 @@ class RecipeEditor(
                 if (it.id != step.id) it
                 else it.copy(
                     content = step.content,
-                    stepImage = step.stepImage,
+                    imagePath = step.imagePath
                 )
             }
         )

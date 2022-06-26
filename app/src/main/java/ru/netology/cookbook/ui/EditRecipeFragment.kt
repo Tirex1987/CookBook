@@ -1,5 +1,6 @@
 package ru.netology.cookbook.ui
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import ru.netology.cookbook.R
 import ru.netology.cookbook.adapter.StepsAdapter
 import ru.netology.cookbook.data.*
 import ru.netology.cookbook.databinding.EditRecipeFragmentBinding
+import ru.netology.cookbook.utils.*
 import ru.netology.cookbook.viewModel.RecipeViewModel
 
 class EditRecipeFragment : Fragment() {
@@ -29,7 +31,8 @@ class EditRecipeFragment : Fragment() {
     )
 
     private lateinit var currentStep: StepOfRecipe
-
+    val orderPermission = OrderPermission(this)
+    val openImageIntent = OpenImageIntent(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +62,9 @@ class EditRecipeFragment : Fragment() {
                 editableRecipe.category.getText(requireContext()),
                 false
             )
+            if (!editableRecipe.preview.isNullOrBlank() && orderPermission.checkPermission()) {
+                binding.photoPreview.loadBitmapFromPath(editableRecipe.preview)
+            }
         }
 
         val recipeEditor = RecipeEditor(viewModel.currentRecipe) {
@@ -88,6 +94,26 @@ class EditRecipeFragment : Fragment() {
             onSaveClicked(binding)
         }
 
+        val selectPhotoLauncher = openImageIntent.registerForAvitvityResult {
+            val imagePath = it ?: return@registerForAvitvityResult
+            val editableRecipe = checkNotNull(viewModel.currentRecipe.value)
+            viewModel.currentRecipe.value = editableRecipe.copy(
+                preview = imagePath
+            )
+            val bitmap = BitmapFactory.decodeFile(imagePath)
+            binding.photoPreview.setImageBitmap(bitmap)
+        }
+
+        binding.selectPhoto.setOnClickListener {
+            orderPermission.requestStoragePermission {
+                binding.selectPhoto.callOnClick()
+            }
+            if (!orderPermission.isPermissionStorage()) {
+                return@setOnClickListener
+            }
+            selectPhotoLauncher.launch(Unit)
+        }
+
         setFragmentResultListener(
             requestKey = EditStepFragment.REQUEST_KEY
         ) { requestKey, bundle ->
@@ -100,7 +126,7 @@ class EditRecipeFragment : Fragment() {
             )
             val newStep = currentStep.copy(
                 content = newStepContent,
-                stepImage = newStepImage
+                imagePath = newStepImage
             )
             recipeEditor.saveStep(newStep)
         }
@@ -115,10 +141,13 @@ class EditRecipeFragment : Fragment() {
     private fun onSaveClicked(binding: EditRecipeFragmentBinding) {
         var textWarning = ""
         if (binding.recipeTitle.text.isNullOrBlank())
-            textWarning = getString(R.string.requiredFieldStart) + getString(R.string.title) + getString(R.string.requiredFieldEnd)
+            textWarning =
+                getString(R.string.requiredFieldStart) + getString(R.string.title) + getString(R.string.requiredFieldEnd)
         if (binding.recipeAuthor.text.isNullOrBlank())
             textWarning = textWarning +
-                    getString(R.string.requiredFieldStart) + getString(R.string.author) + getString(R.string.requiredFieldEnd)
+                    getString(R.string.requiredFieldStart) + getString(R.string.author) + getString(
+                R.string.requiredFieldEnd
+            )
         val editableRecipe = checkNotNull(viewModel.currentRecipe.value)
         if (editableRecipe.steps.isEmpty()) {
             textWarning = textWarning + getString(R.string.blankStepError)

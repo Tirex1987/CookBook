@@ -2,20 +2,33 @@ package ru.netology.cookbook.ui
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import ru.netology.cookbook.R
 import ru.netology.cookbook.adapter.RecipesAdapter
 import ru.netology.cookbook.databinding.FeedFragmentBinding
+import ru.netology.cookbook.utils.OrderPermission
 import ru.netology.cookbook.viewModel.RecipeViewModel
 
 class FeedFragment : Fragment() {
 
-    //private val viewModel by viewModels<RecipeViewModel>()
     val viewModel: RecipeViewModel by viewModels(
         ownerProducer = ::requireParentFragment
     )
+
+    val orderPermission = OrderPermission(this)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        if (!orderPermission.checkPermission()) {
+            orderPermission.requestStoragePermission()
+            //Toast.makeText(requireContext(), getString(R.string.imagesLoadError), Toast.LENGTH_LONG).show()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
