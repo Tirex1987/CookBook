@@ -48,6 +48,7 @@ class RecipeRepositoryImpl(
                 steps = MutableList(10) {
                     StepOfRecipe(
                         id = ++lastIdStep,
+                        recipeId = lastIdRecipe,
                         order = it + 1,
                         content = "d\ng\nu\n"
                     )
@@ -77,7 +78,10 @@ class RecipeRepositoryImpl(
         val newRecipe = recipe.copy(
             steps = recipe.steps.map {
                 if (it.id != RecipeRepository.NEW_STEP_ID) it
-                else it.copy(id = ++lastIdStep)
+                else it.copy(
+                    id = ++lastIdStep,
+                    recipeId = recipe.id
+                )
             }
         )
         update(newRecipe)

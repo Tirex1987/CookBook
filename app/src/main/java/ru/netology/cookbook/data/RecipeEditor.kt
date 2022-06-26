@@ -44,6 +44,7 @@ class RecipeEditor(
 
     fun createNewStep() = StepOfRecipe(
         id = RecipeRepository.NEW_STEP_ID,
+        recipeId = 0,
         order = 0,
         content = ""
     )
