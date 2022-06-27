@@ -57,8 +57,11 @@ class RecipeRepositoryDb(
 
     override fun delete(recipe: Recipe) {
         dao.removeById(recipe.id)
-        data.value?.mapIndexed { index, _recipe ->
-            save(_recipe.copy(order = (index + 1).toLong()))
+        val recipes = data.value ?: return
+        recipes
+            .filterNot { it.id == recipe.id }
+            .mapIndexed { _index, _recipe ->
+            save(_recipe.copy(order = (recipes.size - _index - 1).toLong()))
         }
     }
 
