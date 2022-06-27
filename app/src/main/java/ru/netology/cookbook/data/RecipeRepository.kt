@@ -7,7 +7,7 @@ interface RecipeRepository {
     val enabledCategories: EnabledCategories
 
     fun like(recipeId: Long)
-    fun delete(recipeId: Long)
+    fun delete(recipe: Recipe)
     fun save(recipe: Recipe)
     fun removeStep(stepId: Long)
     fun onApplyFilterClicked()

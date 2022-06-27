@@ -1,6 +1,5 @@
 package ru.netology.cookbook.ui
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +9,6 @@ import androidx.navigation.fragment.navArgs
 import ru.netology.cookbook.adapter.StepsAdapter
 import ru.netology.cookbook.databinding.PreviewRecipeFragmentBinding
 import ru.netology.cookbook.utils.loadBitmapFromPath
-import java.lang.RuntimeException
 
 
 class PreviewRecipeFragment : Fragment() {

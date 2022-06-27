@@ -39,7 +39,7 @@ class StepsAdapter (
             this.step = step
             with(binding) {
                 stepNumber.text = step.order.toString()
-                stepContent.setText(step.content)
+                stepContent.text = step.content
                 groupEditStep.isVisible = (interactionListener != null)
                 if (!step.imagePath.isNullOrBlank()) {
                     try {

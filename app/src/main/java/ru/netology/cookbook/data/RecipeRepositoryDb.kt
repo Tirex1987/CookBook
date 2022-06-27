@@ -20,9 +20,9 @@ class RecipeRepositoryDb(
     override val data = dao.getAll().map { entities ->
         entities
             .map { it.toModel(application) }
-            .map {
-                it.copy(
-                    steps = stepDao.getByRecipeId(it.id).map { it.toModel() }
+            .map { recipe ->
+                recipe.copy(
+                    steps = stepDao.getByRecipeId(recipe.id).map { it.toModel() }
                 )
             }
     }
@@ -55,8 +55,11 @@ class RecipeRepositoryDb(
         dao.favoriteById(recipeId)
     }
 
-    override fun delete(recipeId: Long) {
-        dao.removeById(recipeId)
+    override fun delete(recipe: Recipe) {
+        dao.removeById(recipe.id)
+        data.value?.mapIndexed { index, _recipe ->
+            save(_recipe.copy(order = (index + 1).toLong()))
+        }
     }
 
     override fun removeStep(stepId: Long) {

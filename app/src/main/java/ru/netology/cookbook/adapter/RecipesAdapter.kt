@@ -1,6 +1,7 @@
 package ru.netology.cookbook.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.netology.cookbook.R
 import ru.netology.cookbook.data.Recipe
 import ru.netology.cookbook.databinding.CardRecipeBinding
+import ru.netology.cookbook.utils.loadBitmapFromPath
 
 class RecipesAdapter(
     private val interactionListener: RecipeInteractionListener
@@ -59,6 +61,12 @@ class RecipesAdapter(
                 authorName.text = recipe.authorName
                 category.text = recipe.category.getText(binding.root.context)
                 like.isChecked = recipe.favorite
+                if (!recipe.preview.isNullOrBlank()) {
+                    preview.loadBitmapFromPath(recipe.preview)
+                    preview.visibility = View.VISIBLE
+                } else {
+                    preview.visibility = View.GONE
+                }
                 options.setOnClickListener { popupMenu.show() }
             }
         }

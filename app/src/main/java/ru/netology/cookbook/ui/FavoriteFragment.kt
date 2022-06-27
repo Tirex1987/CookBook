@@ -2,6 +2,7 @@ package ru.netology.cookbook.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -27,7 +28,15 @@ class FavoriteFragment : Fragment() {
         binding.recipesRecyclerView.adapter = adapter
 
         viewModel.data.observe(viewLifecycleOwner) { recipes ->
-            adapter.submitList(recipes.filter { it.favorite })
+            val favoriteRecipes = recipes.filter { it.favorite }
+            adapter.submitList(favoriteRecipes)
+            if (favoriteRecipes.isEmpty()) {
+                binding.blankPageImage.visibility = View.VISIBLE
+                binding.recipesRecyclerView.visibility = View.GONE
+            } else {
+                binding.blankPageImage.visibility = View.GONE
+                binding.recipesRecyclerView.visibility = View.VISIBLE
+            }
         }
 
         viewModel.navigateToPreviewContentFragment.observe(viewLifecycleOwner) { recipe ->

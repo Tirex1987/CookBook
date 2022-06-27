@@ -31,8 +31,8 @@ class EditRecipeFragment : Fragment() {
     )
 
     private lateinit var currentStep: StepOfRecipe
-    val orderPermission = OrderPermission(this)
-    val openImageIntent = OpenImageIntent(this)
+    private val orderPermission = OrderPermission(this)
+    private val openImageIntent = OpenImageIntent(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,16 +55,16 @@ class EditRecipeFragment : Fragment() {
         binding.autoCompleteTextView.setAdapter(adapterComplete)
 
         val editableRecipe = checkNotNull(viewModel.currentRecipe.value)
+        binding.recipeTitle.setText(editableRecipe.title)
+        binding.recipeAuthor.setText(editableRecipe.authorName)
         if (editableRecipe.id != RecipeRepository.NEW_RECIPE_ID) {
-            binding.recipeTitle.setText(editableRecipe.title)
-            binding.recipeAuthor.setText(editableRecipe.authorName)
             binding.autoCompleteTextView.setText(
                 editableRecipe.category.getText(requireContext()),
                 false
             )
-            if (!editableRecipe.preview.isNullOrBlank() && orderPermission.checkPermission()) {
-                binding.photoPreview.loadBitmapFromPath(editableRecipe.preview)
-            }
+        }
+        if (!editableRecipe.preview.isNullOrBlank() && orderPermission.checkPermission()) {
+            binding.photoPreview.loadBitmapFromPath(editableRecipe.preview)
         }
 
         val recipeEditor = RecipeEditor(viewModel.currentRecipe) {
@@ -85,6 +85,16 @@ class EditRecipeFragment : Fragment() {
             findNavController().navigate(direction)
         }
 
+        binding.deletePhotoButton.setOnClickListener {
+            val editedRecipe = checkNotNull(viewModel.currentRecipe.value)
+            if (!editedRecipe.preview.isNullOrBlank()) {
+                viewModel.currentRecipe.value = editedRecipe.copy(
+                    preview = null
+                )
+                binding.photoPreview.setImageResource(R.drawable.no_image)
+            }
+        }
+
         binding.addStep.setOnClickListener {
             currentStep = recipeEditor.createNewStep()
             viewModel.navigateToEditStepFragment.value = currentStep
@@ -96,8 +106,8 @@ class EditRecipeFragment : Fragment() {
 
         val selectPhotoLauncher = openImageIntent.registerForActivityResult {
             val imagePath = it ?: return@registerForActivityResult
-            val editableRecipe = checkNotNull(viewModel.currentRecipe.value)
-            viewModel.currentRecipe.value = editableRecipe.copy(
+            val editedRecipe = checkNotNull(viewModel.currentRecipe.value)
+            viewModel.currentRecipe.value = editedRecipe.copy(
                 preview = imagePath
             )
             val bitmap = BitmapFactory.decodeFile(imagePath)
@@ -144,19 +154,19 @@ class EditRecipeFragment : Fragment() {
             textWarning =
                 getString(R.string.requiredFieldStart) + getString(R.string.title) + getString(R.string.requiredFieldEnd)
         if (binding.recipeAuthor.text.isNullOrBlank())
-            textWarning = textWarning +
+            textWarning +=
                     getString(R.string.requiredFieldStart) + getString(R.string.author) + getString(
                 R.string.requiredFieldEnd
             )
         if (binding.autoCompleteTextView.text.isNullOrBlank()) {
-            textWarning = textWarning +
+            textWarning +=
                     getString(R.string.requiredFieldStart) + getString(R.string.category) + getString(
                 R.string.requiredFieldEnd
             )
         }
         val editableRecipe = checkNotNull(viewModel.currentRecipe.value)
         if (editableRecipe.steps.isEmpty()) {
-            textWarning = textWarning + getString(R.string.blankStepError)
+            textWarning += getString(R.string.blankStepError)
         }
         if (textWarning.isNotBlank()) {
             Toast.makeText(requireContext(), textWarning, Toast.LENGTH_LONG).show()

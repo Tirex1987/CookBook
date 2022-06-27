@@ -8,7 +8,7 @@ import androidx.room.Query
 
 @Dao
 interface RecipeDao {
-    @Query("SELECT * FROM recipes ORDER BY id DESC")
+    @Query("SELECT * FROM recipes ORDER BY orderNum DESC")
     fun getAll(): LiveData<List<RecipesEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

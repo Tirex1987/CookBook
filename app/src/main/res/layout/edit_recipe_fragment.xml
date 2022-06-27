@@ -105,6 +105,16 @@
             tools:listitem="@layout/card_step"/>
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/deletePhotoButton"
+            style="@style/Widget.AppTheme.DeleteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/small_space"
+            app:layout_constraintTop_toTopOf="@id/photoPreview"
+            app:layout_constraintEnd_toEndOf="@id/photoPreview"
+            android:contentDescription="@string/delete" />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/addStep"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

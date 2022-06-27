@@ -39,8 +39,16 @@ class FeedFragment : Fragment() {
 
         binding.recipesRecyclerView.adapter = adapter
 
-        viewModel.data.observe(viewLifecycleOwner) { recipes ->
-            adapter.submitList(viewModel.getFilteredData())
+        viewModel.data.observe(viewLifecycleOwner) {
+            val filteredData = viewModel.getFilteredData()
+            adapter.submitList(filteredData)
+            if (filteredData.isNullOrEmpty()) {
+                binding.blankPageImage.visibility = View.VISIBLE
+                binding.groupRecycler.visibility = View.GONE
+            } else {
+                binding.blankPageImage.visibility = View.GONE
+                binding.groupRecycler.visibility = View.VISIBLE
+            }
         }
 
         binding.fab.setOnClickListener {

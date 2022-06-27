@@ -15,8 +15,6 @@
         android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:singleLine="true"
         android:paddingBottom="@dimen/small_space"
         android:gravity="center_horizontal"
         tools:text="Something very tasty"

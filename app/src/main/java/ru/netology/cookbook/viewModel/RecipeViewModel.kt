@@ -1,7 +1,6 @@
 package ru.netology.cookbook.viewModel
 
 import android.app.Application
-import android.graphics.BitmapFactory
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import ru.netology.cookbook.adapter.RecipeInteractionListener
@@ -33,7 +32,7 @@ class RecipeViewModel(
     fun onAddClicked() {
         navigateToEditRecipeFragment.value = Recipe(
             id = RecipeRepository.NEW_RECIPE_ID,
-            order = 0,
+            order = (data.value?.size?.plus(1) ?: 1).toLong(),
             title = "",
             authorName = "",
             category = Category.Russian,
@@ -80,7 +79,7 @@ class RecipeViewModel(
     }
 
     override fun onRemoveClicked(recipe: Recipe) {
-        repository.delete(recipe.id)
+        repository.delete(recipe)
     }
 
     override fun onEditClicked(recipe: Recipe) {

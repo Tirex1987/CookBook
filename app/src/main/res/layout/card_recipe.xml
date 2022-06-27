@@ -11,37 +11,52 @@
         android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:paddingBottom="@dimen/small_space"
         android:gravity="center_horizontal"
-        tools:text="Something very tasty"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/options"
-        app:layout_constraintBottom_toTopOf="@id/authorInscription"
+        android:paddingBottom="@dimen/small_space"
+        android:textColor="@android:color/holo_blue_dark"
         android:textSize="@dimen/title_text_size"
         android:textStyle="bold"
-        android:textColor="@android:color/holo_blue_dark"/>
+        app:layout_constraintEnd_toStartOf="@id/options"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/options"
+        tools:text="Something very tasty" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/options"
+        style="@style/Widget.AppTheme.OptionsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        style="@style/Widget.AppTheme.OptionsButton"/>
+        app:layout_constraintBottom_toBottomOf="@id/title"/>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="title, options" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/preview"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/imageHeight"
+        android:scaleType="fitXY"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrier2" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/authorInscription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingBottom="@dimen/small_space"
-        app:layout_constraintTop_toBottomOf="@id/title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/categoryInscription"
         android:text="@string/author"
-        android:textSize="@dimen/common_text_size" />
+        android:textSize="@dimen/common_text_size"
+        app:layout_constraintBottom_toTopOf="@id/categoryInscription"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/preview" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/authorName"
@@ -50,20 +65,20 @@
         android:layout_marginStart="@dimen/small_space"
         android:ellipsize="end"
         android:singleLine="true"
-        app:layout_constraintTop_toTopOf="@id/authorInscription"
-        app:layout_constraintStart_toEndOf="@id/authorInscription"
-        tools:text="Me me me"
         android:textSize="@dimen/common_text_size"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/authorInscription"
+        app:layout_constraintTop_toTopOf="@id/authorInscription"
+        tools:text="Me me me" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/categoryInscription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/authorInscription"
-        app:layout_constraintStart_toStartOf="parent"
         android:text="@string/category"
-        android:textSize="@dimen/common_text_size" />
+        android:textSize="@dimen/common_text_size"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/authorInscription" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/category"
@@ -72,20 +87,21 @@
         android:layout_marginStart="@dimen/small_space"
         android:ellipsize="end"
         android:singleLine="true"
+        android:textSize="@dimen/common_text_size"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/categoryInscription"
         app:layout_constraintStart_toEndOf="@id/categoryInscription"
-        tools:text="Europe"
-        android:textSize="@dimen/common_text_size"
-        android:textStyle="bold"/>
+        tools:text="Europe" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/like"
+        style="@style/Widget.AppTheme.LikeCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:checkable="true"
         android:contentDescription="@string/description_recipe_like"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/categoryInscription"
-        style="@style/Widget.AppTheme.LikeCheckBox" />
+        android:layout_marginEnd="@dimen/small_space"
+        app:layout_constraintEnd_toStartOf="@id/options"
+        app:layout_constraintTop_toTopOf="@id/authorName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

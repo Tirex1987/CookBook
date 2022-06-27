@@ -22,8 +22,8 @@ class EditStepFragment : Fragment() {
         args.step
     }
 
-    val orderPermission = OrderPermission(this)
-    val openImageIntent = OpenImageIntent(this)
+    private val orderPermission = OrderPermission(this)
+    private val openImageIntent = OpenImageIntent(this)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,16 +33,11 @@ class EditStepFragment : Fragment() {
 
         var imagePath: String? = null
 
-        if (receivedStep.id != RecipeRepository.NEW_STEP_ID) {
-            binding.stepContent.setText(receivedStep.content)
-            if (!receivedStep.imagePath.isNullOrBlank() && orderPermission.checkPermission()) {
-                try {
-                    binding.stepPhotoView.loadBitmapFromPath(receivedStep.imagePath)
-                } catch (e: RuntimeException) {
-                    binding.stepPhotoView.setImageResource(R.drawable.no_image)
-                    imagePath = null
-                }
-            }
+        binding.stepContent.setText(receivedStep.content)
+        if (!receivedStep.imagePath.isNullOrBlank() && orderPermission.checkPermission()) {
+            binding.stepPhotoView.loadBitmapFromPath(receivedStep.imagePath)
+        } else {
+            binding.stepPhotoView.setImageResource(R.drawable.no_image)
         }
 
         binding.deletePhotoButton.setOnClickListener {
@@ -70,7 +65,7 @@ class EditStepFragment : Fragment() {
 
         binding.saveButton.setOnClickListener {
             val text = binding.stepContent.text.toString()
-            if (!text.isBlank()) {
+            if (text.isNotBlank()) {
                 val resultBundle = Bundle()
                 resultBundle.putString(RESULT_KEY_CONTENT, text)
                 if (!imagePath.isNullOrBlank()) {

@@ -12,8 +12,8 @@ class RecipeEditor(
         val recipe = checkNotNull(recipeLiveData.value)
         recipeLiveData.value = recipe.copy(
         steps = recipe.steps
-            .also {
-                it.find { it == step } ?: return
+            .also { list ->
+                list.find { it == step } ?: return
             }
             .filterNot { it == step }
             .map {
@@ -49,5 +49,5 @@ class RecipeEditor(
         content = ""
     )
 
-    fun getSteps() = checkNotNull(recipeLiveData.value).steps
+    private fun getSteps() = checkNotNull(recipeLiveData.value).steps
 }
