@@ -6,8 +6,8 @@ import android.graphics.BitmapFactory
 import android.util.DisplayMetrics
 import androidx.appcompat.widget.AppCompatImageView
 
-fun AppCompatImageView.loadBitmapFromPath(imagePath: String?, height: Int = 200) {
-    val bitmap = BitmapFactory.decodeFile(imagePath)
+fun AppCompatImageView.loadBitmapFromPath(imagePath: String?, height: Int = 200): Boolean {
+    val bitmap = BitmapFactory.decodeFile(imagePath) ?: return false
     val bitmapHeight = dpToPx(height, this.context)
     val scaled = bitmap.height * 1.0 / bitmapHeight
     val bitmapWidth = (bitmap.width / scaled).toInt()
@@ -19,6 +19,7 @@ fun AppCompatImageView.loadBitmapFromPath(imagePath: String?, height: Int = 200)
             false
         )
     )
+    return true
 }
 
 fun dpToPx(dp: Int, context: Context) =

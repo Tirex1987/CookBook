@@ -50,11 +50,13 @@ class RecipeViewModel(
         }
         if (searchString.isNotBlank()) {
             return filteredRecipes?.filter {
-                it.title.contains(searchString)
+                it.title.contains(searchString, true)
             }
         }
         return filteredRecipes
     }
+
+    fun getSearchString() = searchString
 
     fun onSearchClicked(searchString: String) {
         this.searchString = searchString.trim()

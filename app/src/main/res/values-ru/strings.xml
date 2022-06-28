@@ -37,4 +37,6 @@
     <string name="imagesLoadError">Изображения не будут загружены</string>
     <string name="filterCategory">Фильтр по категориям</string>
     <string name="noChooseFilterError">Выберите хотя бы одну категорию</string>
+    <string name="permissions">Разрешения</string>
+    <string name="dialogPermissions">Разрешите приложению доступ к фото, чтобы иметь возможность загружать изображения к вашим рецептам</string>
 </resources>

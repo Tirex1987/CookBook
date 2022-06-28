@@ -7,6 +7,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import ru.netology.cookbook.R
 import ru.netology.cookbook.data.StepOfRecipe
 import ru.netology.cookbook.databinding.CardStepBinding
 import ru.netology.cookbook.utils.loadBitmapFromPath
@@ -42,10 +43,9 @@ class StepsAdapter (
                 stepContent.text = step.content
                 groupEditStep.isVisible = (interactionListener != null)
                 if (!step.imagePath.isNullOrBlank()) {
-                    try {
-                        stepPhotoView.loadBitmapFromPath(step.imagePath)
-                        stepPhotoView.visibility = View.VISIBLE
-                    } catch (e: RuntimeException) {
+                    stepPhotoView.visibility = View.VISIBLE
+                    if (!stepPhotoView.loadBitmapFromPath(step.imagePath)) {
+                        stepPhotoView.setImageResource(R.drawable.no_image)
                     }
                 } else {
                     stepPhotoView.visibility = View.GONE

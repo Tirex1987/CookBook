@@ -3,11 +3,13 @@ package ru.netology.cookbook.ui
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.cookbook.adapter.RecipesAdapter
 import ru.netology.cookbook.databinding.FeedFragmentBinding
+import ru.netology.cookbook.ui.dialog.PermissionDialogFragment
 import ru.netology.cookbook.utils.OrderPermission
 import ru.netology.cookbook.utils.hideKeyboard
 import ru.netology.cookbook.viewModel.RecipeViewModel
@@ -24,8 +26,9 @@ class FeedFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         if (!orderPermission.checkPermission()) {
-            orderPermission.requestStoragePermission()
-            //Toast.makeText(requireContext(), getString(R.string.imagesLoadError), Toast.LENGTH_LONG).show()
+            PermissionDialogFragment {
+                orderPermission.requestStoragePermission()
+            }.show(requireActivity().supportFragmentManager, "permissions")
         }
     }
 
@@ -50,6 +53,8 @@ class FeedFragment : Fragment() {
                 binding.groupRecycler.visibility = View.VISIBLE
             }
         }
+
+        binding.searchEditText.setText(viewModel.getSearchString())
 
         binding.fab.setOnClickListener {
             viewModel.onAddClicked()

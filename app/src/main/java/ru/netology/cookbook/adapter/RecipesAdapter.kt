@@ -62,8 +62,10 @@ class RecipesAdapter(
                 category.text = recipe.category.getText(binding.root.context)
                 like.isChecked = recipe.favorite
                 if (!recipe.preview.isNullOrBlank()) {
-                    preview.loadBitmapFromPath(recipe.preview)
                     preview.visibility = View.VISIBLE
+                    if (!preview.loadBitmapFromPath(recipe.preview)) {
+                        preview.setImageResource(R.drawable.no_image)
+                    }
                 } else {
                     preview.visibility = View.GONE
                 }

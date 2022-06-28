@@ -36,4 +36,6 @@
     <string name="imagesLoadError">Images won\'t load</string>
     <string name="filterCategory">Filter by category</string>
     <string name="noChooseFilterError">Please select at least one category</string>
+    <string name="permissions">Permissions</string>
+    <string name="dialogPermissions">Allow the app access to photos to be able to upload images to your recipes</string>
 </resources>
