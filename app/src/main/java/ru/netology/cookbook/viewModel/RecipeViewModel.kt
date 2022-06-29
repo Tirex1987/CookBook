@@ -88,5 +88,9 @@ class RecipeViewModel(
         navigateToEditRecipeFragment.value = recipe
     }
 
+    override fun onMove(fromPosition: Int, toPosition: Int) {
+        repository.onMoveRecipe(fromPosition, toPosition)
+    }
+
     // endregion RecipeInteractionListener
 }

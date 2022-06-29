@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/small_space"
+    android:paddingLeft="@dimen/small_space"
+    android:paddingRight="@dimen/small_space"
     tools:context=".ui.FeedFragment">
 
     <androidx.appcompat.widget.AppCompatImageView

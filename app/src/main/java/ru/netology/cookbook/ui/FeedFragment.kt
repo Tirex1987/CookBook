@@ -7,7 +7,9 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import ru.netology.cookbook.adapter.RecipesAdapter
+import ru.netology.cookbook.adapter.helper.HandleItemTouchHelperCallback
 import ru.netology.cookbook.databinding.FeedFragmentBinding
 import ru.netology.cookbook.ui.dialog.PermissionDialogFragment
 import ru.netology.cookbook.utils.OrderPermission
@@ -41,6 +43,9 @@ class FeedFragment : Fragment() {
         val adapter = RecipesAdapter(viewModel)
 
         binding.recipesRecyclerView.adapter = adapter
+
+        val helper = ItemTouchHelper(HandleItemTouchHelperCallback(adapter))
+        helper.attachToRecyclerView(binding.recipesRecyclerView)
 
         viewModel.data.observe(viewLifecycleOwner) {
             val filteredData = viewModel.getFilteredData()

@@ -69,6 +69,31 @@ class RecipeRepositoryDb(
         stepDao.removeById(stepId)
     }
 
+    override fun onMoveRecipe(fromPosition: Int, toPosition: Int) {
+        val recipes = data.value ?: return
+        if (fromPosition < toPosition) {
+            recipes
+                .filterIndexed { index, recipe ->
+                    index >= fromPosition && index <= toPosition
+                }.mapIndexed { index, recipe ->
+                    if (index == 0) {
+                        save(recipe.copy(order = recipes.get(toPosition).order))
+                    } else {
+                        save(recipe.copy(order = recipe.order + 1))
+                    }
+                }
+        } else {
+            recipes
+                .filterIndexed { index, recipe ->
+                    index >= toPosition && index < fromPosition
+                }.mapIndexed { index, recipe ->
+                    if (index == 0) {
+                        save(recipes.get(fromPosition).copy(order = recipes.get(toPosition).order))
+                    }
+                    save(recipe.copy(order = recipe.order - 1))
+                }
+        }
+    }
 
     private val prefs = application.getSharedPreferences(
         "repo", Context.MODE_PRIVATE

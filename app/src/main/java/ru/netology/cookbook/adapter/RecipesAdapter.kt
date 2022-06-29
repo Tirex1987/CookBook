@@ -8,13 +8,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.cookbook.R
+import ru.netology.cookbook.adapter.helper.ItemTouchHelperAdapter
 import ru.netology.cookbook.data.Recipe
 import ru.netology.cookbook.databinding.CardRecipeBinding
 import ru.netology.cookbook.utils.loadBitmapFromPath
+import java.util.*
 
 class RecipesAdapter(
     private val interactionListener: RecipeInteractionListener
-) : ListAdapter<Recipe, RecipesAdapter.ViewHolder>(DiffCallback) {
+) : ListAdapter<Recipe, RecipesAdapter.ViewHolder>(DiffCallback), ItemTouchHelperAdapter {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -80,5 +82,10 @@ class RecipesAdapter(
 
         override fun areContentsTheSame(oldItem: Recipe, newItem: Recipe): Boolean =
             oldItem == newItem
+    }
+
+    override fun onItemMove(fromPosition: Int, toPosition: Int) {
+        interactionListener.onMove(fromPosition, toPosition)
+        notifyItemMoved(fromPosition, toPosition)
     }
 }
