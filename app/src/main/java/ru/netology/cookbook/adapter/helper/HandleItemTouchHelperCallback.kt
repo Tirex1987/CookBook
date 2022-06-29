@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 class HandleItemTouchHelperCallback(
     private val adapter: ItemTouchHelperAdapter
 ) : ItemTouchHelper.Callback() {
+
     override fun getMovementFlags(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder

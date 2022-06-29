@@ -48,15 +48,7 @@ class FeedFragment : Fragment() {
         helper.attachToRecyclerView(binding.recipesRecyclerView)
 
         viewModel.data.observe(viewLifecycleOwner) {
-            val filteredData = viewModel.getFilteredData()
-            adapter.submitList(filteredData)
-            if (filteredData.isNullOrEmpty()) {
-                binding.blankPageImage.visibility = View.VISIBLE
-                binding.groupRecycler.visibility = View.GONE
-            } else {
-                binding.blankPageImage.visibility = View.GONE
-                binding.groupRecycler.visibility = View.VISIBLE
-            }
+            submitListAdapter(adapter, binding)
         }
 
         binding.searchEditText.setText(viewModel.getSearchString())
@@ -88,7 +80,7 @@ class FeedFragment : Fragment() {
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
                 if (event?.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
                     viewModel.onSearchClicked(binding.searchEditText.text.toString())
-                    adapter.submitList(viewModel.getFilteredData())
+                    submitListAdapter(adapter, binding)
                     binding.searchEditText.clearFocus()
                     binding.searchEditText.hideKeyboard()
                     return true
@@ -119,4 +111,16 @@ class FeedFragment : Fragment() {
         }
 
     }.root
+
+    private fun submitListAdapter(adapter: RecipesAdapter, binding: FeedFragmentBinding) {
+        val filteredData = viewModel.getFilteredData()
+        adapter.submitList(filteredData)
+        if (filteredData.isNullOrEmpty()) {
+            binding.blankPageImage.visibility = View.VISIBLE
+            binding.groupRecycler.visibility = View.GONE
+        } else {
+            binding.blankPageImage.visibility = View.GONE
+            binding.groupRecycler.visibility = View.VISIBLE
+        }
+    }
 }

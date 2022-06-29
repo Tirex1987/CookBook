@@ -12,7 +12,6 @@ import ru.netology.cookbook.adapter.helper.ItemTouchHelperAdapter
 import ru.netology.cookbook.data.Recipe
 import ru.netology.cookbook.databinding.CardRecipeBinding
 import ru.netology.cookbook.utils.loadBitmapFromPath
-import java.util.*
 
 class RecipesAdapter(
     private val interactionListener: RecipeInteractionListener
@@ -85,7 +84,11 @@ class RecipesAdapter(
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int) {
-        interactionListener.onMove(fromPosition, toPosition)
+        //interactionListener.onMove(fromPosition, toPosition)
         notifyItemMoved(fromPosition, toPosition)
+    }
+
+    override fun submitList(list: List<Recipe>?) {
+        super.submitList(list)
     }
 }
