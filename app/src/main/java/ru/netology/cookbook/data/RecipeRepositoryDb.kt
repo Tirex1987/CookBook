@@ -38,7 +38,7 @@ class RecipeRepositoryDb(
             preview =  recipe.preview
         )
         recipe.steps.map {
-            if (it.id == RecipeRepository.NEW_STEP_ID) stepDao.insert(it.copy(
+            if (it.id <= RecipeRepository.NEW_STEP_ID) stepDao.insert(it.copy(
                 recipeId = if (recipe.id == RecipeRepository.NEW_RECIPE_ID) dao.getMaxId()
                 else recipe.id
             ).toEntity())
@@ -69,9 +69,24 @@ class RecipeRepositoryDb(
         stepDao.removeById(stepId)
     }
 
-    override fun onMoveRecipe(fromPosition: Int, toPosition: Int) {
-        val recipes = data.value ?: return
+    override fun onMoveRecipe(fromPosition: Int, toPosition: Int, list: List<Recipe>) {
+        //val recipes = data.value ?: return
         if (fromPosition < toPosition) {
+            val toOrder = list[toPosition - fromPosition].order
+            for (index in (toPosition - fromPosition) downTo 1) {
+                val recipe = list[index]
+                save(recipe.copy(order = list[index - 1].order))
+            }
+            save(list[0].copy(order = toOrder))
+        } else {
+            val fromOrder = list[0].order
+            for (index in 0 until fromPosition - toPosition) {
+                val recipe = list[index]
+                save(recipe.copy(order = list[index + 1].order))
+            }
+            save(list[fromPosition - toPosition].copy(order = fromOrder))
+        }
+        /*if (fromPosition < toPosition) {
             recipes
                 .filterIndexed { index, recipe ->
                     index >= fromPosition && index <= toPosition
@@ -92,7 +107,7 @@ class RecipeRepositoryDb(
                     }
                     save(recipe.copy(order = recipe.order - 1))
                 }
-        }
+        }*/
     }
 
     private val prefs = application.getSharedPreferences(

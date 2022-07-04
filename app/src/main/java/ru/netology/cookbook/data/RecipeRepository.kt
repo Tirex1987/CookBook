@@ -11,7 +11,7 @@ interface RecipeRepository {
     fun save(recipe: Recipe)
     fun removeStep(stepId: Long)
     fun onApplyFilterClicked()
-    fun onMoveRecipe(fromPosition: Int, toPosition: Int)
+    fun onMoveRecipe(fromPosition: Int, toPosition: Int, list: List<Recipe>)
 
     companion object {
         const val NEW_RECIPE_ID = 0L

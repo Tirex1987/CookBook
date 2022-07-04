@@ -16,21 +16,24 @@ class RecipeViewModel(
     val data by repository::data
 
     val navigateToPreviewContentFragment = SingleLiveEvent<Recipe>()
-    val navigateToEditRecipeFragment = SingleLiveEvent<Recipe>()
-    val navigateToEditStepFragment = SingleLiveEvent<StepOfRecipe>()
+    val navigateToEditRecipeFragment = SingleLiveEvent<Unit>()
+    val navigateToEditStepFragment = SingleLiveEvent<Unit>()
     val navigateToFilterFragment = SingleLiveEvent<Unit>()
 
     val currentRecipe = MutableLiveData<Recipe?>(null)
+    lateinit var currentStep: StepOfRecipe
 
     val enabledCategories by repository::enabledCategories
     private var searchString: String = ""
+
+    var isMoved = false
 
     fun saveRecipe(recipe: Recipe) {
         repository.save(recipe)
     }
 
     fun onAddClicked() {
-        navigateToEditRecipeFragment.value = Recipe(
+        currentRecipe.value = Recipe(
             id = RecipeRepository.NEW_RECIPE_ID,
             order = (data.value?.size?.plus(1) ?: 1).toLong(),
             title = "",
@@ -38,6 +41,7 @@ class RecipeViewModel(
             category = Category.Russian,
             steps = emptyList()
         )
+        navigateToEditRecipeFragment.call()
     }
 
     fun onFilterClicked() {
@@ -85,11 +89,14 @@ class RecipeViewModel(
     }
 
     override fun onEditClicked(recipe: Recipe) {
-        navigateToEditRecipeFragment.value = recipe
+        currentRecipe.value = recipe
+        navigateToEditRecipeFragment.call()
     }
 
-    override fun onMove(fromPosition: Int, toPosition: Int) {
-        repository.onMoveRecipe(fromPosition, toPosition)
+    override fun onMove(fromPosition: Int, toPosition: Int, list: List<Recipe>) {
+        isMoved = true
+        repository.onMoveRecipe(fromPosition, toPosition, list)
+        isMoved = false
     }
 
     // endregion RecipeInteractionListener

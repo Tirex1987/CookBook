@@ -19,9 +19,8 @@ class FilterFragment : Fragment() {
         ownerProducer = ::requireParentFragment
     )
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    override fun onResume() {
+        super.onResume()
         (requireActivity() as? AppActivity)?.showBottomNav(false)
     }
 

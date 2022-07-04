@@ -7,5 +7,5 @@ interface RecipeInteractionListener {
     fun onRecipeClicked(recipe: Recipe)
     fun onRemoveClicked(recipe: Recipe)
     fun onEditClicked(recipe: Recipe)
-    fun onMove(fromPosition: Int, toPosition: Int)
+    fun onMove(fromPosition: Int, toPosition: Int, list: List<Recipe>)
 }

@@ -7,23 +7,27 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import ru.netology.cookbook.R
-import ru.netology.cookbook.data.RecipeRepository
 import ru.netology.cookbook.databinding.EditStepFragmentBinding
 import ru.netology.cookbook.utils.*
+import ru.netology.cookbook.viewModel.RecipeViewModel
 
 
 class EditStepFragment : Fragment() {
 
-    private val receivedStep by lazy {
-        val args by navArgs<EditStepFragmentArgs>()
-        args.step
-    }
+    private val viewModel: RecipeViewModel by viewModels(
+        ownerProducer = ::requireParentFragment
+    )
 
     private val orderPermission = OrderPermission(this)
     private val openImageIntent = OpenImageIntent(this)
+
+    override fun onResume() {
+        super.onResume()
+        (requireActivity() as? AppActivity)?.showBottomNav(false)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,7 +35,7 @@ class EditStepFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = EditStepFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
 
-        var imagePath: String? = null
+        var receivedStep by viewModel::currentStep
 
         binding.stepContent.setText(receivedStep.content)
         if (!receivedStep.imagePath.isNullOrBlank() && orderPermission.checkPermission()) {
@@ -41,15 +45,15 @@ class EditStepFragment : Fragment() {
         }
 
         binding.deletePhotoButton.setOnClickListener {
-            if (!imagePath.isNullOrBlank()) {
-                imagePath = null
+            if (!receivedStep.imagePath.isNullOrBlank()) {
+                receivedStep = receivedStep.copy(imagePath = null)
                 binding.stepPhotoView.setImageResource(R.drawable.no_image)
             }
         }
 
         val selectPhotoLauncher = openImageIntent.registerForActivityResult {
-            imagePath = it ?: return@registerForActivityResult
-            val bitmap = BitmapFactory.decodeFile(imagePath)
+            receivedStep = receivedStep.copy(imagePath = it ?: return@registerForActivityResult)
+            val bitmap = BitmapFactory.decodeFile(receivedStep.imagePath)
             binding.stepPhotoView.setImageBitmap(bitmap)
         }
 
@@ -66,12 +70,8 @@ class EditStepFragment : Fragment() {
         binding.saveButton.setOnClickListener {
             val text = binding.stepContent.text.toString()
             if (text.isNotBlank()) {
-                val resultBundle = Bundle()
-                resultBundle.putString(RESULT_KEY_CONTENT, text)
-                if (!imagePath.isNullOrBlank()) {
-                    resultBundle.putString(RESULT_KEY_IMAGE_PATH, imagePath)
-                }
-                setFragmentResult(REQUEST_KEY, resultBundle)
+                receivedStep = receivedStep.copy(content = text)
+                setFragmentResult(REQUEST_KEY, Bundle())
                 findNavController().popBackStack()
             } else {
                 Toast.makeText(
@@ -85,8 +85,6 @@ class EditStepFragment : Fragment() {
     }.root
 
     companion object {
-        const val RESULT_KEY_CONTENT = "stepNewContent"
-        const val RESULT_KEY_IMAGE_PATH = "stepPhotoPath"
         const val REQUEST_KEY = "editStepRequestKey"
     }
 }

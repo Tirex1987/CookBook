@@ -9,13 +9,12 @@ class RecipeEditor(
 ) : EditStepInteractionListener {
 
     override fun onDeleteClicked(step: StepOfRecipe) {
-        val recipe = checkNotNull(recipeLiveData.value)
-        recipeLiveData.value = recipe.copy(
-        steps = recipe.steps
+        recipeLiveData.value = getRecipe().copy(
+        steps = getRecipe().steps
             .also { list ->
-                list.find { it == step } ?: return
+                list.find { it.id == step.id } ?: return
             }
-            .filterNot { it == step }
+            .filterNot { it.id == step.id }
             .map {
                 if (it.order < step.order) it
                 else it.copy(order = it.order - 1)
@@ -28,11 +27,11 @@ class RecipeEditor(
     }
 
     fun saveStep(step: StepOfRecipe) {
-        val recipe = checkNotNull(recipeLiveData.value)
-        recipeLiveData.value = recipe.copy(
-            steps = if (step.id == RecipeRepository.NEW_STEP_ID)
-                recipe.steps + step.copy(order = getSteps().size + 1)
-            else recipe.steps.map {
+        recipeLiveData.value = getRecipe().copy(
+            steps = if (step.id == RecipeRepository.NEW_STEP_ID) {
+                getRecipe().steps + step.copy(id = getNextStepId())
+            }
+            else getRecipe().steps.map {
                 if (it.id != step.id) it
                 else it.copy(
                     content = step.content,
@@ -42,12 +41,21 @@ class RecipeEditor(
         )
     }
 
-    fun createNewStep() = StepOfRecipe(
-        id = RecipeRepository.NEW_STEP_ID,
-        recipeId = 0,
-        order = 0,
-        content = ""
-    )
+    fun createNewStep() : StepOfRecipe {
+        return StepOfRecipe(
+            id = RecipeRepository.NEW_STEP_ID,
+            recipeId = getRecipe().id,
+            order = getRecipe().steps.size.plus(1),
+            content = ""
+        )
+    }
 
-    private fun getSteps() = checkNotNull(recipeLiveData.value).steps
+    private fun getRecipe() = checkNotNull(recipeLiveData.value)
+
+    private fun getNextStepId() : Long {
+        if (getRecipe().steps.isEmpty()) return RecipeRepository.NEW_STEP_ID - 1
+        val minId = getRecipe().steps.minOf { it.id }
+        return if (minId > RecipeRepository.NEW_STEP_ID) RecipeRepository.NEW_STEP_ID - 1
+        else minId - 1
+    }
 }

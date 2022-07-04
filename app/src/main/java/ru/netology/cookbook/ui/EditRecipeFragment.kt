@@ -11,7 +11,6 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import ru.netology.cookbook.R
 import ru.netology.cookbook.adapter.StepsAdapter
 import ru.netology.cookbook.data.*
@@ -21,25 +20,16 @@ import ru.netology.cookbook.viewModel.RecipeViewModel
 
 class EditRecipeFragment : Fragment() {
 
-    private val receivedRecipe by lazy {
-        val args by navArgs<EditRecipeFragmentArgs>()
-        args.recipe
-    }
-
     private val viewModel: RecipeViewModel by viewModels(
         ownerProducer = ::requireParentFragment
     )
 
-    private lateinit var currentStep: StepOfRecipe
     private val orderPermission = OrderPermission(this)
     private val openImageIntent = OpenImageIntent(this)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    override fun onResume() {
+        super.onResume()
         (requireActivity() as? AppActivity)?.showBottomNav(false)
-
-        viewModel.currentRecipe.value = receivedRecipe
     }
 
     override fun onCreateView(
@@ -68,8 +58,8 @@ class EditRecipeFragment : Fragment() {
         }
 
         val recipeEditor = RecipeEditor(viewModel.currentRecipe) {
-            currentStep = it
-            viewModel.navigateToEditStepFragment.value = currentStep
+            viewModel.currentStep = it
+            viewModel.navigateToEditStepFragment.call()
         }
 
         val adapter = StepsAdapter(recipeEditor)
@@ -79,9 +69,9 @@ class EditRecipeFragment : Fragment() {
             adapter.submitList(recipe?.steps)
         }
 
-        viewModel.navigateToEditStepFragment.observe(viewLifecycleOwner) { step ->
+        viewModel.navigateToEditStepFragment.observe(viewLifecycleOwner) {
             val direction =
-                EditRecipeFragmentDirections.actionEditRecipeFragmentToEditStepFragment(step)
+                EditRecipeFragmentDirections.actionEditRecipeFragmentToEditStepFragment()
             findNavController().navigate(direction)
         }
 
@@ -96,8 +86,8 @@ class EditRecipeFragment : Fragment() {
         }
 
         binding.addStep.setOnClickListener {
-            currentStep = recipeEditor.createNewStep()
-            viewModel.navigateToEditStepFragment.value = currentStep
+            viewModel.currentStep = recipeEditor.createNewStep()
+            viewModel.navigateToEditStepFragment.call()
         }
 
         binding.fab.setOnClickListener {
@@ -126,19 +116,9 @@ class EditRecipeFragment : Fragment() {
 
         setFragmentResultListener(
             requestKey = EditStepFragment.REQUEST_KEY
-        ) { requestKey, bundle ->
+        ) { requestKey, _ ->
             if (requestKey != EditStepFragment.REQUEST_KEY) return@setFragmentResultListener
-            val newStepContent = bundle.getString(
-                EditStepFragment.RESULT_KEY_CONTENT
-            ) ?: return@setFragmentResultListener
-            val newStepImage = bundle.getString(
-                EditStepFragment.RESULT_KEY_IMAGE_PATH
-            )
-            val newStep = currentStep.copy(
-                content = newStepContent,
-                imagePath = newStepImage
-            )
-            recipeEditor.saveStep(newStep)
+            recipeEditor.saveStep(viewModel.currentStep)
         }
 
     }.root

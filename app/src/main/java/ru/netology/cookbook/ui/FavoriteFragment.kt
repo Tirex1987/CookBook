@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
+import ru.netology.cookbook.R
 import ru.netology.cookbook.adapter.RecipesAdapter
 import ru.netology.cookbook.databinding.FavoriteFragmentBinding
 import ru.netology.cookbook.viewModel.RecipeViewModel
@@ -44,9 +46,9 @@ class FavoriteFragment : Fragment() {
             findNavController().navigate(direction)
         }
 
-        viewModel.navigateToEditRecipeFragment.observe(viewLifecycleOwner) { recipe ->
+        viewModel.navigateToEditRecipeFragment.observe(viewLifecycleOwner) {
             val direction =
-                FavoriteFragmentDirections.actionFavoriteFragmentToEditRecipeFragment(recipe)
+                FavoriteFragmentDirections.actionFavoriteFragmentToEditRecipeFragment()
             findNavController().navigate(direction)
         }
 

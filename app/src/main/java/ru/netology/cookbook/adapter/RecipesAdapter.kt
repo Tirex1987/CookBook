@@ -84,8 +84,17 @@ class RecipesAdapter(
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int) {
-        //interactionListener.onMove(fromPosition, toPosition)
-        notifyItemMoved(fromPosition, toPosition)
+        val list = if (fromPosition < toPosition) {
+            currentList.filterIndexed { index, _ ->
+                index >= fromPosition && index <= toPosition
+            }
+        } else {
+            currentList.filterIndexed { index, _ ->
+                index >= toPosition && index <= fromPosition
+            }
+        }
+        //notifyItemMoved(fromPosition, toPosition)
+        interactionListener.onMove(fromPosition, toPosition, list)
     }
 
     override fun submitList(list: List<Recipe>?) {

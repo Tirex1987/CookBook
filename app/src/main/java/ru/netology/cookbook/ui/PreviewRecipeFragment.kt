@@ -18,13 +18,16 @@ class PreviewRecipeFragment : Fragment() {
         args.recipe
     }
 
+    override fun onResume() {
+        super.onResume()
+        (requireActivity() as? AppActivity)?.showBottomNav(false)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = PreviewRecipeFragmentBinding.inflate(layoutInflater, container, false).also { binding ->
-
-        (requireActivity() as? AppActivity)?.showBottomNav(false)
 
         binding.title.text = receivedRecipe.title
         binding.authorName.text = receivedRecipe.authorName

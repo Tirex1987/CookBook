@@ -45,9 +45,6 @@
         android:id="@+id/editRecipeFragment"
         android:name="ru.netology.cookbook.ui.EditRecipeFragment"
         android:label="EditRecipeFragment" >
-        <argument
-            android:name="recipe"
-            app:argType="ru.netology.cookbook.data.Recipe"/>
         <action
             android:id="@+id/action_editRecipeFragment_to_editStepFragment"
             app:destination="@id/editStepFragment" />
@@ -56,11 +53,7 @@
         android:id="@+id/editStepFragment"
         android:name="ru.netology.cookbook.ui.EditStepFragment"
         android:label="edit_step_fragment"
-        tools:layout="@layout/edit_step_fragment" >
-        <argument
-            android:name="step"
-            app:argType="ru.netology.cookbook.data.StepOfRecipe" />
-    </fragment>
+        tools:layout="@layout/edit_step_fragment" />
     <fragment
         android:id="@+id/filterFragment"
         android:name="ru.netology.cookbook.ui.FilterFragment"

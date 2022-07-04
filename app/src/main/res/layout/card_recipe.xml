@@ -42,7 +42,7 @@
         android:id="@+id/preview"
         android:layout_width="match_parent"
         android:layout_height="@dimen/imageHeight"
-        android:scaleType="fitXY"
+        android:scaleType="fitCenter"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/barrier2" />

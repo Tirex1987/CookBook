@@ -3,7 +3,6 @@ package ru.netology.cookbook.ui
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -48,7 +47,9 @@ class FeedFragment : Fragment() {
         helper.attachToRecyclerView(binding.recipesRecyclerView)
 
         viewModel.data.observe(viewLifecycleOwner) {
-            submitListAdapter(adapter, binding)
+            if (!viewModel.isMoved) {
+                submitListAdapter(adapter, binding)
+            }
         }
 
         binding.searchEditText.setText(viewModel.getSearchString())
@@ -66,8 +67,8 @@ class FeedFragment : Fragment() {
             findNavController().navigate(direction)
         }
 
-        viewModel.navigateToEditRecipeFragment.observe(viewLifecycleOwner) { recipe ->
-            val direction = FeedFragmentDirections.actionFeedFragmentToEditRecipeFragment(recipe)
+        viewModel.navigateToEditRecipeFragment.observe(viewLifecycleOwner) {
+            val direction = FeedFragmentDirections.actionFeedFragmentToEditRecipeFragment()
             findNavController().navigate(direction)
         }
 
