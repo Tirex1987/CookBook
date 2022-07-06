@@ -70,49 +70,28 @@ class RecipeRepositoryDb(
     }
 
     override fun onMoveRecipe(fromPosition: Int, toPosition: Int, list: List<Recipe>) {
-        //val recipes = data.value ?: return
         if (fromPosition < toPosition) {
-            val toOrder = list[toPosition - fromPosition].order
-            for (index in (toPosition - fromPosition) downTo 1) {
+            val toOrder = list[toPosition].order
+            for (index in toPosition downTo fromPosition + 1) {
                 val recipe = list[index]
                 save(recipe.copy(order = list[index - 1].order))
             }
-            save(list[0].copy(order = toOrder))
+            save(list[fromPosition].copy(order = toOrder))
         } else {
-            val fromOrder = list[0].order
-            for (index in 0 until fromPosition - toPosition) {
+            val fromOrder = list[toPosition].order
+            for (index in toPosition until fromPosition) {
                 val recipe = list[index]
                 save(recipe.copy(order = list[index + 1].order))
             }
-            save(list[fromPosition - toPosition].copy(order = fromOrder))
+            save(list[fromPosition].copy(order = fromOrder))
         }
-        /*if (fromPosition < toPosition) {
-            recipes
-                .filterIndexed { index, recipe ->
-                    index >= fromPosition && index <= toPosition
-                }.mapIndexed { index, recipe ->
-                    if (index == 0) {
-                        save(recipe.copy(order = recipes.get(toPosition).order))
-                    } else {
-                        save(recipe.copy(order = recipe.order + 1))
-                    }
-                }
-        } else {
-            recipes
-                .filterIndexed { index, recipe ->
-                    index >= toPosition && index < fromPosition
-                }.mapIndexed { index, recipe ->
-                    if (index == 0) {
-                        save(recipes.get(fromPosition).copy(order = recipes.get(toPosition).order))
-                    }
-                    save(recipe.copy(order = recipe.order - 1))
-                }
-        }*/
     }
 
     private val prefs = application.getSharedPreferences(
         "repo", Context.MODE_PRIVATE
     )
+
+    override val enabledCategories = getCategoriesPrefs()
 
     private fun getCategoriesPrefs(): EnabledCategories {
         val enabledCategories = EnabledCategories()
@@ -128,10 +107,12 @@ class RecipeRepositoryDb(
         }
     }
 
-    override val enabledCategories = getCategoriesPrefs()
-
     override fun onApplyFilterClicked() {
         setCategoriesPrefs(enabledCategories)
+    }
+
+    override fun getFilteredData() = data.value?.filter {
+        enabledCategories.isEnabled(it.category)
     }
 
 }

@@ -6,4 +6,5 @@ interface EditStepInteractionListener {
 
     fun onDeleteClicked(step: StepOfRecipe)
     fun onEditClicked(step: StepOfRecipe)
+    fun onMove(fromPosition: Int, toPosition: Int, list: List<StepOfRecipe>)
 }

@@ -11,8 +11,10 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import ru.netology.cookbook.R
 import ru.netology.cookbook.adapter.StepsAdapter
+import ru.netology.cookbook.adapter.helper.HandleItemTouchHelperCallback
 import ru.netology.cookbook.data.*
 import ru.netology.cookbook.databinding.EditRecipeFragmentBinding
 import ru.netology.cookbook.utils.*
@@ -64,6 +66,9 @@ class EditRecipeFragment : Fragment() {
 
         val adapter = StepsAdapter(recipeEditor)
         binding.stepsRecipesRecyclerView.adapter = adapter
+
+        val helper = ItemTouchHelper(HandleItemTouchHelperCallback(adapter))
+        helper.attachToRecyclerView(binding.stepsRecipesRecyclerView)
 
         viewModel.currentRecipe.observe(viewLifecycleOwner) { recipe ->
             adapter.submitList(recipe?.steps)
@@ -135,14 +140,14 @@ class EditRecipeFragment : Fragment() {
                 getString(R.string.requiredFieldStart) + getString(R.string.title) + getString(R.string.requiredFieldEnd)
         if (binding.recipeAuthor.text.isNullOrBlank())
             textWarning +=
-                    getString(R.string.requiredFieldStart) + getString(R.string.author) + getString(
-                R.string.requiredFieldEnd
-            )
+                getString(R.string.requiredFieldStart) + getString(R.string.author) + getString(
+                    R.string.requiredFieldEnd
+                )
         if (binding.autoCompleteTextView.text.isNullOrBlank()) {
             textWarning +=
-                    getString(R.string.requiredFieldStart) + getString(R.string.category) + getString(
-                R.string.requiredFieldEnd
-            )
+                getString(R.string.requiredFieldStart) + getString(R.string.category) + getString(
+                    R.string.requiredFieldEnd
+                )
         }
         val editableRecipe = checkNotNull(viewModel.currentRecipe.value)
         if (editableRecipe.steps.isEmpty()) {

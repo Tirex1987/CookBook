@@ -26,8 +26,6 @@ class RecipeViewModel(
     val enabledCategories by repository::enabledCategories
     private var searchString: String = ""
 
-    var isMoved = false
-
     fun saveRecipe(recipe: Recipe) {
         repository.save(recipe)
     }
@@ -49,9 +47,7 @@ class RecipeViewModel(
     }
 
     fun getFilteredData(): List<Recipe>? {
-        val filteredRecipes = data.value?.filter {
-            enabledCategories.isEnabled(it.category)
-        }
+        val filteredRecipes = repository.getFilteredData()
         if (searchString.isNotBlank()) {
             return filteredRecipes?.filter {
                 it.title.contains(searchString, true)
@@ -94,9 +90,7 @@ class RecipeViewModel(
     }
 
     override fun onMove(fromPosition: Int, toPosition: Int, list: List<Recipe>) {
-        isMoved = true
         repository.onMoveRecipe(fromPosition, toPosition, list)
-        isMoved = false
     }
 
     // endregion RecipeInteractionListener

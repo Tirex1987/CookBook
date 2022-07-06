@@ -85,7 +85,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/small_space"
-        android:ellipsize="end"
         android:singleLine="true"
         android:textSize="@dimen/common_text_size"
         android:textStyle="bold"

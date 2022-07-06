@@ -12,6 +12,7 @@ import ru.netology.cookbook.adapter.helper.ItemTouchHelperAdapter
 import ru.netology.cookbook.data.Recipe
 import ru.netology.cookbook.databinding.CardRecipeBinding
 import ru.netology.cookbook.utils.loadBitmapFromPath
+import java.util.*
 
 class RecipesAdapter(
     private val interactionListener: RecipeInteractionListener
@@ -28,7 +29,8 @@ class RecipesAdapter(
     }
 
 
-    inner class ViewHolder(private val binding: CardRecipeBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: CardRecipeBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         private lateinit var recipe: Recipe
 
         private val popupMenu by lazy {
@@ -51,8 +53,12 @@ class RecipesAdapter(
         }
 
         init {
-            binding.like.setOnClickListener{ interactionListener.onLikeClicked(recipe) }
-            binding.constraintLayoutRecipe.setOnClickListener { interactionListener.onRecipeClicked(recipe) }
+            binding.like.setOnClickListener { interactionListener.onLikeClicked(recipe) }
+            binding.constraintLayoutRecipe.setOnClickListener {
+                interactionListener.onRecipeClicked(
+                    recipe
+                )
+            }
         }
 
         fun bind(recipe: Recipe) {
@@ -75,7 +81,7 @@ class RecipesAdapter(
         }
     }
 
-    private object DiffCallback: DiffUtil.ItemCallback<Recipe>() {
+    private object DiffCallback : DiffUtil.ItemCallback<Recipe>() {
         override fun areItemsTheSame(oldItem: Recipe, newItem: Recipe): Boolean =
             oldItem.id == newItem.id
 
@@ -84,20 +90,12 @@ class RecipesAdapter(
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int) {
-        val list = if (fromPosition < toPosition) {
-            currentList.filterIndexed { index, _ ->
-                index >= fromPosition && index <= toPosition
-            }
-        } else {
-            currentList.filterIndexed { index, _ ->
-                index >= toPosition && index <= fromPosition
-            }
-        }
-        //notifyItemMoved(fromPosition, toPosition)
-        interactionListener.onMove(fromPosition, toPosition, list)
+        val list = currentList.toMutableList()
+        Collections.swap(list, fromPosition, toPosition)
+        submitList(list)
     }
 
-    override fun submitList(list: List<Recipe>?) {
-        super.submitList(list)
+    override fun onDropItem(fromPosition: Int, toPosition: Int) {
+        interactionListener.onMove(fromPosition, toPosition, currentList)
     }
 }

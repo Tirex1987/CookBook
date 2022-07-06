@@ -7,6 +7,9 @@ class HandleItemTouchHelperCallback(
     private val adapter: ItemTouchHelperAdapter
 ) : ItemTouchHelper.Callback() {
 
+    private var dragFrom = -1
+    private var dragTo = -1
+
     override fun getMovementFlags(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder
@@ -20,6 +23,10 @@ class HandleItemTouchHelperCallback(
         viewHolder: RecyclerView.ViewHolder,
         target: RecyclerView.ViewHolder
     ): Boolean {
+        if (dragFrom == -1) {
+            dragFrom = viewHolder.adapterPosition
+        }
+        dragTo = target.adapterPosition
         adapter.onItemMove(viewHolder.adapterPosition, target.adapterPosition)
         return true
     }
@@ -29,5 +36,15 @@ class HandleItemTouchHelperCallback(
 
     override fun isLongPressDragEnabled(): Boolean {
         return true
+    }
+
+    override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+        super.clearView(recyclerView, viewHolder)
+
+        if (dragFrom != -1 && dragTo != -1 && dragFrom != dragTo) {
+            adapter.onDropItem(dragFrom, dragTo)
+        }
+        dragFrom = -1
+        dragTo = -1
     }
 }

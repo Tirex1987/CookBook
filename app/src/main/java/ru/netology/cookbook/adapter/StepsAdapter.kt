@@ -8,14 +8,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.cookbook.R
+import ru.netology.cookbook.adapter.helper.ItemTouchHelperAdapter
 import ru.netology.cookbook.data.StepOfRecipe
 import ru.netology.cookbook.databinding.CardStepBinding
 import ru.netology.cookbook.utils.loadBitmapFromPath
 import java.lang.RuntimeException
+import java.util.*
 
-class StepsAdapter (
+class StepsAdapter(
     private val interactionListener: EditStepInteractionListener?
-) : ListAdapter<StepOfRecipe, StepsAdapter.ViewHolder>(DiffCallback) {
+) : ListAdapter<StepOfRecipe, StepsAdapter.ViewHolder>(DiffCallback), ItemTouchHelperAdapter {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -28,11 +30,12 @@ class StepsAdapter (
     }
 
 
-    inner class ViewHolder(private val binding: CardStepBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: CardStepBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         private lateinit var step: StepOfRecipe
 
         init {
-            binding.deleteStepButton.setOnClickListener{ interactionListener?.onDeleteClicked(step) }
+            binding.deleteStepButton.setOnClickListener { interactionListener?.onDeleteClicked(step) }
             binding.editStepButton.setOnClickListener { interactionListener?.onEditClicked(step) }
         }
 
@@ -54,11 +57,23 @@ class StepsAdapter (
         }
     }
 
-    private object DiffCallback: DiffUtil.ItemCallback<StepOfRecipe>() {
+    private object DiffCallback : DiffUtil.ItemCallback<StepOfRecipe>() {
         override fun areItemsTheSame(oldItem: StepOfRecipe, newItem: StepOfRecipe): Boolean =
             oldItem.id == newItem.id
 
         override fun areContentsTheSame(oldItem: StepOfRecipe, newItem: StepOfRecipe): Boolean =
             oldItem == newItem
+    }
+
+    override fun onItemMove(fromPosition: Int, toPosition: Int) {
+        if (interactionListener != null) {
+            val list = currentList.toMutableList()
+            Collections.swap(list, fromPosition, toPosition)
+            submitList(list)
+        }
+    }
+
+    override fun onDropItem(fromPosition: Int, toPosition: Int) {
+        interactionListener?.onMove(fromPosition, toPosition, currentList)
     }
 }

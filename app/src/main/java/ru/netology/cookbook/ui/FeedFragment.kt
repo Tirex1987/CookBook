@@ -47,9 +47,7 @@ class FeedFragment : Fragment() {
         helper.attachToRecyclerView(binding.recipesRecyclerView)
 
         viewModel.data.observe(viewLifecycleOwner) {
-            if (!viewModel.isMoved) {
-                submitListAdapter(adapter, binding)
-            }
+            submitListAdapter(adapter, binding)
         }
 
         binding.searchEditText.setText(viewModel.getSearchString())
