@@ -1,7 +1,11 @@
 package ru.netology.cookbook.ui
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
+import android.widget.TextView
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -12,6 +16,7 @@ import ru.netology.cookbook.adapter.helper.HandleItemTouchHelperCallback
 import ru.netology.cookbook.databinding.FeedFragmentBinding
 import ru.netology.cookbook.ui.dialog.PermissionDialogFragment
 import ru.netology.cookbook.utils.OrderPermission
+import ru.netology.cookbook.utils.Watcher
 import ru.netology.cookbook.utils.hideKeyboard
 import ru.netology.cookbook.viewModel.RecipeViewModel
 
@@ -86,6 +91,11 @@ class FeedFragment : Fragment() {
                 }
                 return false
             }
+        })
+
+        binding.searchEditText.addTextChangedListener(Watcher {
+            viewModel.onSearchClicked(binding.searchEditText.text.toString())
+            submitListAdapter(adapter, binding)
         })
 
         setFragmentResultListener(

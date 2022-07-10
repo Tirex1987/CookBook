@@ -39,6 +39,7 @@ class RecipeRepositoryDb(
         )
         recipe.steps.map {
             if (it.id <= RecipeRepository.NEW_STEP_ID) stepDao.insert(it.copy(
+                id = RecipeRepository.NEW_STEP_ID,
                 recipeId = if (recipe.id == RecipeRepository.NEW_RECIPE_ID) dao.getMaxId()
                 else recipe.id
             ).toEntity())
